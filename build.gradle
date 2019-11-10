@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'application'
+
+
+description = 'Resistor Calculator Command Line Interface Application'
+
+mainClassName = 'ResistCalcCLI.ResistCalc'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    compile "com.beust:jcommander:1.71"
+}
