@@ -1,0 +1,107 @@
+* Sprint 1 - Create parameters (Args class)
+* Sprint 2 - Print Args
+* Sprint 3 - Translate Colors into Values (band 3)
+* Sprint 4 - ... (band 4)
+* Sprint 5 - ... (band 5)
+* Sprint 6 - ... (band 6)
+* Sprint 7 - Translate Colors into Values with Units
+* Sprint 8 - Create shell script for command (Linux/macOS)
+
+
++ Big Boys Race Out Young Girls but Violet Generally Wins
+
++ Resistor Band Types
+  - 3 Band (default)
+    - Number
+    - Number
+    - Multiplier
+  - 4 Band
+    - Number
+    - Number
+    - Multiplier
+    - Tolerance
+  - 5 Band
+    - Number
+    - Number
+    - Number
+    - Multiplier
+    - Tolerance
+  - 6 Band
+    - Number
+    - Number
+    - Number
+    - Multiplier
+    - Tolerance
+    - PPM
+
++ General Colors (colors, value, multiplier, tolerance, ppm)
+  - Black   (0)     1 ohms                  250ppm/K
+  - Brown   (1)     10 ohms     +/-1%       100ppm/K
+  - Red     (2)     100 ohms    +/-2%       50ppm/K
+  - Orange  (3)     1K ohms                 15ppm/K
+  - Yellow  (4)     10K ohms                25ppm/K
+  - Green   (5)     100K ohms   +/-0.5%     20ppm/K
+  - Blue    (6)     1M ohms     +/-0.25%    10ppm/K
+  - Violet  (7)     10M ohms    +/-0.10%    5ppm/K
+  - Grey    (8)     100M ohms   +/-0.25%    1ppm/K
+  - White   (9)     1G ohms
+  - Gold            0.10 ohms   +/-5%
+  - Silver          0.01 ohms   +/-10%
+
+
+
+No parameters given...
+"Usage: resistcalc [OPTION] [VALUE(S)]"
+"Try 'resistcalc -help' for more information"
+
+Get help...
+-help <topic> or prints a man page
+
+Signify band type...
+-b or -band <value of 3, 4, 5 or 6>
+Default is 3
+Requires three or more colors value
+
+Signify Color Values
+-c or -colors <comma delimited values? or array? red, green, blue, etc.>
+
+Signify ohms (K, M, G) Units
+-u or units <K, M or G>
+Default is ohms
+
+Signify Value (translate to color code)
+-v or -value <value of resistor: 200 - 3K - 201M - etc.>
+
+Signify Tolerance Value (when using -v)
+-t or -tolerance <.25, .5, etc.>
+
+Signify Temperature Coefficient of Resistance (PPM)
+-p <100>
+
+
+EXAMPLES...
+Return value for a four band resistor of red, black, yellow:
+resistcalc -b 4 -c red black yellow
+- returns 20000 ohms
+
+Return value for a five band resistor of green, brown, red, orange and red:
+resistcalc -b 5 -c green brown red orange red
+- returns 512000 ohms +/-2% Tolerance
+
+Return value for a four band resistor of violet, black and blue in K ohms
+resistcalc -c violet black blue -u M
+- returns 70M ohms
+
+Return color codes for resistor value of 348K ohms:
+resistcalc -v 348K
+- return Orange-Yellow-Grey-Orange
+
+
+Install Method?
+- .deb
+- .rpm
+- .exe or msi
+- .pkg
+- .zip (with install script)
+
+Removal Method?
