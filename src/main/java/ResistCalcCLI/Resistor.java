@@ -1,14 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ResistCalcCLI;
 
-/**
- *
- * @author baphil8649 (Blake Phillips)
- */
+import java.util.ArrayList;
+
 public class Resistor {
     /*
     General Colors (colors, value, multiplier, tolerance, ppm)
@@ -25,5 +18,19 @@ public class Resistor {
     - Gold            0.10 ohms   +/-5%
     - Silver          0.01 ohms   +/-10%
     */
+    public String translateToValue(int bands, ArrayList colors, String units, boolean debug) {
+        String resistance = "";
+        
+        switch (bands) {
+            
+        }
+        
+        return resistance;
+    }
     
+    public ArrayList translateToColors(String value, String units, double tolerance, int pmm, boolean debug) {
+        ArrayList<String> colors = new ArrayList<String>();
+        
+        return colors;
+    }
 }

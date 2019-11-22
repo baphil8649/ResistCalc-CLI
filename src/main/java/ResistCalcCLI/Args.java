@@ -5,10 +5,6 @@ import com.beust.jcommander.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author baphil8649 (Blake Phillips)
- */
 public class Args {
     // Number of Bands (resistor type)
     @Parameter(names = {"-b", "--bands"}, 
@@ -16,21 +12,7 @@ public class Args {
     private int bands = 3;
 
     // Color (band) Values (from left to right)
-    @Parameter(names = {"-c", "--colors"}, 
-            description = "Color (band) Values (from left to right)\n"
-                        + "Color - Value - Multiplier - Tolerance - PPM\n"
-                        + "--------------------------------------------\n"
-                        + "BLACK   0    1 ohms                  250ppm/K\n"
-                        + "RED     2    10 ohms     +/-1%       100ppm/K\n"
-                        + "ORANGE  3    1K ohms                 15ppm/K\n"
-                        + "YELLOW  4    10K ohms                25ppm/K\n"
-                        + "GREEN   5    100K ohms   +/-0.5%     20ppm/K\n"
-                        + "BLUE    6    1M ohms     +/-0.25%    10ppm/K\n"
-                        + "VIOLET  7    10M ohms    +/-0.10%    5ppm/K\n"
-                        + "GREY    8    100M ohms   +/-0.25%    1ppm/K\n"
-                        + "WHITE   9    1G ohms\n"
-                        + "GOLD         0.10 ohms   +/-5%\n"
-                        + "SILVER       0.01 ohms   +/-10%")
+    @Parameter(names = {"-c", "--colors"}, description = "Color (band) Values (from left to right)")
     private List<String> colors = new ArrayList<String>();
 
     // Debug Mode
@@ -55,8 +37,8 @@ public class Args {
     private String units = "O";
     
     // Resistor Value (translate to color code)
-    @Parameter(names = {"-v", "--value"}) 
-    private String value;
+    @Parameter(names = {"-r", "--resistance-value"}) 
+    private String resistance;
 
 
     public int getBands() {
@@ -87,7 +69,7 @@ public class Args {
         return units; // Return Ohm Units
     }
 
-    public String getValue() {
-        return value; // Return Resistor Value
+    public String getResistance() {
+        return resistance; // Return Resistor Value
     }
 }

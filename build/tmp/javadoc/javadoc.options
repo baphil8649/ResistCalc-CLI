@@ -1,0 +1,8 @@
+-classpath 'C:\\Users\\bp024988\\Documents\\GitHub\\ResistCalc-CLI\\build\\classes\\java\\main;C:\\Users\\bp024988\\Documents\\GitHub\\ResistCalc-CLI\\build\\resources\\main;C:\\Users\\bp024988\\.gradle\\caches\\modules-2\\files-2.1\\com.beust\\jcommander\\1.71\\739360ff1c3094bfd4ca3a0ef5c2127ce3fca7dd\\jcommander-1.71.jar'
+-d 'C:\\Users\\bp024988\\Documents\\GitHub\\ResistCalc-CLI\\build\\docs\\javadoc'
+-doctitle 'ResistCalc-CLI API'
+-quiet 
+-windowtitle 'ResistCalc-CLI API'
+'C:\\Users\\bp024988\\Documents\\GitHub\\ResistCalc-CLI\\src\\main\\java\\ResistCalcCLI\\Args.java'
+'C:\\Users\\bp024988\\Documents\\GitHub\\ResistCalc-CLI\\src\\main\\java\\ResistCalcCLI\\ResistCalc.java'
+'C:\\Users\\bp024988\\Documents\\GitHub\\ResistCalc-CLI\\src\\main\\java\\ResistCalcCLI\\Resistor.java'
