@@ -34,7 +34,7 @@ public class Args {
     
     // Ohm Units (K, M, G)
     @Parameter(names = {"-u", "--units"}) 
-    private String units = "O";
+    private String units = "O"; // 'O' = ohms
     
     // Resistor Value (translate to color code)
     @Parameter(names = {"-r", "--resistance-value"}) 
