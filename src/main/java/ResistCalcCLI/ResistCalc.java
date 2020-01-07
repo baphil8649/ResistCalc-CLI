@@ -5,28 +5,33 @@ import com.beust.jcommander.JCommander;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Collections;
 
 public class ResistCalc {
 
     public static void main(String[] args) {
         ResistCalc rCalc = new ResistCalc();
         
-        String[] testParams = {"-c", "black, green", "-u", "M", "--debug"}; // TODO: replace testParams with args
+        String[] testParams = {"-c", "gold, green, red", "-u", "M", "--debug"}; // TODO: replace testParams with args
         //String[] testParams = {"-b", "5", "-c", "blue, red, orange", "-u", "K", "--debug"}; // TODO: replace testParams with args
         //String[] testParams = {"-v", "300M", "-t", ".5", "-p", "100"};
         //String[] testParams = {"--help"};
         //String[] testParams = {};
 
         if(testParams.length != 0) {  // TODO: replace testParams with args
+            // Arge (arguments) and JCommander class objects
             Args paramArgs = new Args();
             JCommander jc = new JCommander(paramArgs);
+            
+            // Parse argument for parameters
             jc.newBuilder().addObject(paramArgs).build().parse(testParams); // TODO: replace testParams with args
 
             // Get number of color bands to calculate
             // 3 (default) - 6 (max)
             // Ex. 'java -jar ResistCalc -b 5' sets band value to 5
             int bandsVal = paramArgs.getBands();
+            if(bandsVal < 3 || bandsVal > 6) { // Set bands value to default of 3
+                bandsVal = 3;                  // if less than 3 or greater than 6
+            }
             
             // Get band colors
             // Limit bands to the number specified in bandsVal
@@ -59,7 +64,7 @@ public class ResistCalc {
             // Debug Indicator (shows additional logging)
             boolean debugInd = paramArgs.getDebug();
             
-            
+            // Arguments at beginning...
             if(debugInd) {
                 System.out.println("- Arguments -");
                 System.out.println("-------------");
@@ -76,36 +81,22 @@ public class ResistCalc {
 
             if(!helpInd) {
                 Resistor r1 = new Resistor();
-                /*
-                if(colorsList.size() > 0) {
-                    if(debugInd) {
-                        System.out.println("Bands (pre-calc) ->" + bandsVal);
-                        System.out.println("Colors (pre-calc) ->" + colorsList);
-                        System.out.println("Units (pre-calc) ->" + unitsVal);
-                        System.out.println("Debug Ind (pre-calc) ->" + debugInd);
-                    }
-
-                    //for(int idx = 0; idx < colorsList.size(); idx++) {
-                    //    System.out.println(colorsList.get(idx));
-                   //}
-                    //String output = r1.translateToValue(bandsVal, colorsList, unitsVal, debugInd);
+                
+                if(colorsList.length > 0) { // Translate color bands to resistance value
+                    System.out.println(r1.translateToValue(colorsList, unitsVal, debugInd));
                     
-                    //System.out.println("Hello There!");
+                } else if(resistanceVal.length() > 0) { // Translate resistance to color bands
+                    System.out.println(r1.translateToColors(resistanceVal, unitsVal, toleranceVal, ppmVal, debugInd));
                     
-                } else if(resistanceVal.length() > 0) {
-                    System.out.println("Resistance Value ->" + resistanceVal);
-                    System.out.println("Tolerance Value ->" + toleranceVal);
-                    System.out.println("PPM Value ->" + ppmVal);
-                    
-                } else {
+                } else { // Something went wrong, display a short help text
                     rCalc.helpTextShort();
                 }
-                */
-            } else {
+                
+            } else { // Help was requested, display short man page
                 rCalc.helpTextLong();
             }
             
-        } else {
+        } else { // No parameters given, display a short help text
             rCalc.helpTextShort();
         } // end main if
     } // end main method
@@ -127,5 +118,5 @@ public class ResistCalc {
                          + "        Blah blah blah...\n"
                          + "SOURCE\n"
                          + "    https://github.com/baphil8649/ResistCalc-CLI");
-    } // end helpText
+    } // end helpTextLong
 }
