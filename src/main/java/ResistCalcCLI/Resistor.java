@@ -68,11 +68,14 @@ public class Resistor {
 
     public String translateToValue(String[] pColors, String pUnits, boolean pDebug) { 
         boolean errorInd = false;
-        String baseNum;
+        int bandSz = pColors.length;
+        String baseNum = "";
         double multiplier;
+        double tolerance;
+        int ppm;
         String resistance = ""; // Final returned value
         
-        for(int idx = 0; idx < pColors.length; idx++) {
+        for(int idx = 0; idx < bandSz; idx++) {
             
             // Breakout if one of the bands is NULL
             if(pColors[idx] == null) {
@@ -87,23 +90,65 @@ public class Resistor {
             }
             
             // Breakout if the first or second band is GOLD or SILVER...
-            if(idx == 0 || idx == 1) {
-               if(pColors[idx].toUpperCase().trim() == "GOLD" || pColors[idx].toUpperCase().trim() == "SILVER") {
-                   resistance = "ERROR: Invalid color band (" + (idx+1) + ") of " + pColors[idx].toUpperCase() + ".";
-                   break;  
-               }
-            }
+//            if(idx == 0 || idx == 1) {
+//                if(pColors[idx].toUpperCase() == "GOLD" || pColors[idx].toUpperCase() == "SILVER") {
+//                   resistance = "ERROR: Invalid color band (" + (idx+1) + ") of " + pColors[idx].toUpperCase() + ".";
+//                   break;
+//               }
+//            }
             
             
             // Translate FIRST color band...
-            //baseNum = getColorValue(pColors[idx]);
-            
+            if(idx == 0) {
+                baseNum = getColorValue(pColors[idx]);
+            }
             
             // Translate SECOND color band...
+            if(idx == 1) {
+                baseNum = baseNum + getColorValue(pColors[idx]);
+                
+            }
+
+            // Translate THIRD color band...
+            if(idx == 2) {
+                if(bandSz == 3) {
+                    multiplier = getColorMultiplier(pColors[idx]);
+                } else if(bandSz > 3) {
+                    baseNum = baseNum + getColorValue(pColors[idx]);
+                }
+            }
+            
+            // Translate FOURTH color band...
+            if(idx == 3) {
+                tolerance = getColorMultiplier(pColors[idx]);
+            }
+            
+            // Translate FIFTH color band...
+            if(idx == 4) {
+                multiplier = getColorMultiplier(pColors[idx]);
+            }
+            
+            // Translate SIXTH color band...
+            if(idx == 5) {
+                multiplier = getColorMultiplier(pColors[idx]);
+            }
             
             
         }
-
+        
+        
+//System.out.println(" Resistance is FUTILE!  ");
+//System.out.println("       ___________      ");
+//System.out.println("      /-/_"/-/_/-/|     ");
+//System.out.println("     /"-/-_"/-_//||     ");
+//System.out.println("    /__________/|/|     ");
+//System.out.println("    |"|_'='-]:+|/||     ");
+//System.out.println("    |-+-|.|_'-"||//     ");
+//System.out.println("    |[".[:!+-'=|//      ");
+//System.out.println("    |='!+|-:]|-|/       ");
+//System.out.println("     ----------         ");
+        
+        
         return resistance;
     }
     
@@ -184,5 +229,48 @@ public class Resistor {
         }
         
         return colorVal;
+    }
+
+    static double getColorMultiplier(String color) {
+        double multiplier = 1.0;
+
+        switch(color.toUpperCase().trim()) {
+            case "BLACK":
+                multiplier = eBands.BLACK.getMultiplier();
+                break;
+            case "RED":
+                multiplier = eBands.RED.getMultiplier();
+                break;
+            case "ORANGE":
+                multiplier = eBands.ORANGE.getMultiplier();
+                break;
+            case "YELLOW":
+                multiplier = eBands.YELLOW.getMultiplier();
+                break;
+            case "GREEN":
+                multiplier = eBands.GREEN.getMultiplier();
+                break;
+            case "BLUE":
+                multiplier = eBands.BLUE.getMultiplier();
+                break;
+            case "VIOLET":
+                multiplier = eBands.VIOLET.getMultiplier();
+                break;
+            case "GREY":
+                multiplier = eBands.ORANGE.getMultiplier();
+                break;
+            case "WHITE":
+                multiplier = eBands.WHITE.getMultiplier();
+                break;
+            case "GOLD":
+                multiplier = eBands.GOLD.getMultiplier();
+                break;
+            case "SILVER":
+                multiplier = eBands.SILVER.getMultiplier();
+            default:
+                multiplier = 1.0;
+        }
+        
+        return multiplier;
     }
 }

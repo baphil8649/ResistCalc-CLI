@@ -22,7 +22,7 @@ public class Args {
     
     // Help or Usage()
     @Parameter(names = "--help", help = true)
-    private boolean help;
+    private boolean help = false;
     
     //Temperature Coefficient of Resistance (PPM)
     @Parameter(names = {"-p", "--ppm"}) 

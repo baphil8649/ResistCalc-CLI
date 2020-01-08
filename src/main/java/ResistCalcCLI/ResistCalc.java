@@ -11,7 +11,7 @@ public class ResistCalc {
     public static void main(String[] args) {
         ResistCalc rCalc = new ResistCalc();
         
-        String[] testParams = {"-c", "gold, green, red", "-u", "M", "--debug"}; // TODO: replace testParams with args
+        String[] testParams = {"-c", "blue, green, red", "-u", "M", "--debug"}; // TODO: replace testParams with args
         //String[] testParams = {"-b", "5", "-c", "blue, red, orange", "-u", "K", "--debug"}; // TODO: replace testParams with args
         //String[] testParams = {"-v", "300M", "-t", ".5", "-p", "100"};
         //String[] testParams = {"--help"};
@@ -75,7 +75,7 @@ public class ResistCalc {
                 System.out.println("Tolerance       : " + toleranceVal);
                 System.out.println("PPM             : " + toleranceVal);
                 System.out.println("Debug Ind       : " + debugInd);
-                System.out.println("Help Ind        : " + debugInd);
+                System.out.println("Help Ind        : " + helpInd);
                 System.out.println("");
             }
 
