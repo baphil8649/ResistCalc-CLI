@@ -2,12 +2,13 @@ package ResistCalcCLI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.math.BigDecimal;
 
 enum eBands {
     /*
         Color Codes
-        Color       Value       Multiplier      Tolerance       PPM
-        ----------------------------------------------------------------
+        Color       Value       Multiplier      Tolerance       Temp. Coefficient
+        -------------------------------------------------------------------------
         Black       (0)         1 ohms                          250ppm/K
         Brown       (1)         10 ohms         +/-1%           100ppm/K
         Red         (2)         100 ohms        +/-2%           50ppm/K
@@ -22,23 +23,23 @@ enum eBands {
         Silver                  0.01 ohms       +/-10%
     */
     
-    BLACK("0", 1, 0.0, 250),
-    BROWN("1", 10, 1.0, 100),
-    RED("2", 100, 2.0, 50),
-    ORANGE("3", 1000, 0.0, 15),
-    YELLOW("4", 10000, 0.0, 25),
-    GREEN("5", 100000, 0.5, 20),
-    BLUE("6", 1000000, 0.25, 10),
-    VIOLET("7", 10000000, 0.10, 5),
-    GREY("8", 100000000, 0.25, 1),
-    WHITE("9", 1000000000, 0.0, 0),
-    GOLD("0", 0.10, 5, 0),
-    SILVER("0", 0.01, 10, 0);
+    BLACK ("0",     1,          1.0,    250),
+    BROWN ("1",     10,         10.0,   100),
+    RED   ("2",     100,        100.0,  50),
+    ORANGE("3",     1000,       0.0,    15),
+    YELLOW("4",     10000,      0.0,    25),
+    GREEN ("5",     100000,     0.5,    20),
+    BLUE  ("6",     1000000,    0.25,   10),
+    VIOLET("7",     10000000,   0.10,   5),
+    GREY  ("8",     100000000,  0.25,   1),
+    WHITE ("9",     1000000000, 0.0,    0),
+    GOLD  ("0",     0.10,       5,      0),
+    SILVER("0",     0.01,       10,     0);
     
     private String value;
     private double multiplier;
     private double tolerance;
-    private int pmm;
+    private int tempCoef;
     
     public String getValue() {
         return this.value;
@@ -52,31 +53,31 @@ enum eBands {
         return this.tolerance;
     }
 
-    public int getPmm() {
-        return this.pmm;
+    public int getTempCoef() {
+        return this.tempCoef;
     }
     
     private eBands(String value, double multiplier, double tolerance, int pmm) {
         this.value = value;
         this.multiplier = multiplier;
         this.tolerance = tolerance;
-        this.pmm = pmm;
+        this.tempCoef = pmm;
     }
 }
 
 public class Resistor {
 
-    public String translateToValue(String[] pColors, String pUnits, boolean pDebug) { 
-        boolean errorInd = false;
-        int bandSz = pColors.length;
-        String baseNum = "";
-        double multiplier;
-        double tolerance;
-        int ppm;
+    public String translateToValue(String[] pColors, String pUnits, boolean pDebug) {    
+        String baseVal = "";
+        double baseNum = 0.0;
+        double res = 0.0;
+        double multiplier = 1.0;
+        double tolerance = 0.0;
+        int tempCoef = 0;
         String resistance = ""; // Final returned value
         
-        for(int idx = 0; idx < bandSz; idx++) {
-            
+        for(int idx = 0; idx < pColors.length; idx++) {
+
             // Breakout if one of the bands is NULL
             if(pColors[idx] == null) {
                 resistance = "ERROR: Color band (" + (idx+1) + ") is missing.";
@@ -89,65 +90,93 @@ public class Resistor {
                 break;
             }
             
-            // Breakout if the first or second band is GOLD or SILVER...
-//            if(idx == 0 || idx == 1) {
-//                if(pColors[idx].toUpperCase() == "GOLD" || pColors[idx].toUpperCase() == "SILVER") {
-//                   resistance = "ERROR: Invalid color band (" + (idx+1) + ") of " + pColors[idx].toUpperCase() + ".";
-//                   break;
-//               }
-//            }
-            
-            
+            // TODO: Breakout if the first or second band is GOLD or SILVER...
+
             // Translate FIRST color band...
             if(idx == 0) {
-                baseNum = getColorValue(pColors[idx]);
+                baseVal = getColorValue(pColors[idx]);
             }
             
             // Translate SECOND color band...
             if(idx == 1) {
-                baseNum = baseNum + getColorValue(pColors[idx]);
-                
+                baseVal = baseVal + getColorValue(pColors[idx]);
             }
 
             // Translate THIRD color band...
             if(idx == 2) {
-                if(bandSz == 3) {
+                if(pColors.length == 3) {
                     multiplier = getColorMultiplier(pColors[idx]);
-                } else if(bandSz > 3) {
-                    baseNum = baseNum + getColorValue(pColors[idx]);
+                } else if(pColors.length > 4) {
+                    baseVal = baseVal + getColorValue(pColors[idx]);
                 }
             }
             
             // Translate FOURTH color band...
             if(idx == 3) {
-                tolerance = getColorMultiplier(pColors[idx]);
+                if(pColors.length == 4) {
+                    tolerance = getColorTolerance(pColors[idx]);
+                } else if(pColors.length > 4) {
+                    multiplier = getColorMultiplier(pColors[idx]);
+                }
             }
             
             // Translate FIFTH color band...
             if(idx == 4) {
-                multiplier = getColorMultiplier(pColors[idx]);
+                tolerance = getColorTolerance(pColors[idx]);
             }
             
             // Translate SIXTH color band...
             if(idx == 5) {
-                multiplier = getColorMultiplier(pColors[idx]);
+                tempCoef = getColorTempCoef(pColors[idx]);
             }
-            
-            
         }
         
-        
-//System.out.println(" Resistance is FUTILE!  ");
-//System.out.println("       ___________      ");
-//System.out.println("      /-/_"/-/_/-/|     ");
-//System.out.println("     /"-/-_"/-_//||     ");
-//System.out.println("    /__________/|/|     ");
-//System.out.println("    |"|_'='-]:+|/||     ");
-//System.out.println("    |-+-|.|_'-"||//     ");
-//System.out.println("    |[".[:!+-'=|//      ");
-//System.out.println("    |='!+|-:]|-|/       ");
-//System.out.println("     ----------         ");
-        
+        // Resistance Value
+        if(resistance != "") {
+          baseNum = Double.parseDouble(baseVal);
+            
+          res = baseNum * multiplier;
+          
+          if(pUnits == "K") {
+              res = res / 1000.0;
+              resistance = BigDecimal.valueOf(res).toPlainString() + "K Ohms";
+              
+          } else if(pUnits == "M") {
+              res = res / 100000.0;
+              resistance = BigDecimal.valueOf(res).toPlainString() + "M Ohms";
+              
+          } else if(pUnits == "G") {
+              res = res / 1000000000.0;
+              resistance = BigDecimal.valueOf(res).toPlainString() + "G Ohms";
+              
+          } else {
+              resistance = BigDecimal.valueOf(res).toPlainString() + " Ohms";
+          }
+          
+          // Tolerance
+          if(tolerance != 0.0) {
+              resistance = resistance + " +/-" + tolerance + "%";
+          }
+          
+          // Temp. Coefficient
+          if(tempCoef != 0) {
+              resistance = resistance + " " + tempCoef + "ppm/K";
+          }
+        }
+
+        if(pDebug) {
+            System.out.println("- Color Bands Translation -");
+            System.out.println("---------------------------");
+            System.out.println("Band Colors (Param) : " + Arrays.toString(pColors).toUpperCase());
+            System.out.println("Units (Param)       : " + pUnits);
+            System.out.println("Base Value          : " + baseVal);
+            System.out.println("Base Number         : " + baseNum);
+            System.out.println("Multiplier          : " + multiplier);
+            System.out.println("Tolerance           : " + tolerance);
+            System.out.println("Temp. Coefficient   : " + tempCoef);
+            System.out.println("Resistance          : " + resistance);
+            System.out.println("");
+            }
         
         return resistance;
     }
@@ -167,6 +196,8 @@ public class Resistor {
 
         switch(color.toUpperCase().trim()) {
             case "BLACK":
+                break;
+            case "BROWN":
                 break;
             case "RED":
                 break;
@@ -203,6 +234,9 @@ public class Resistor {
             case "BLACK":
                 colorVal = eBands.BLACK.getValue();
                 break;
+            case "BROWN":
+                colorVal = eBands.BROWN.getValue();
+                break;
             case "RED":
                 colorVal = eBands.RED.getValue();
                 break;
@@ -238,6 +272,9 @@ public class Resistor {
             case "BLACK":
                 multiplier = eBands.BLACK.getMultiplier();
                 break;
+            case "BROWN":
+                multiplier = eBands.BROWN.getMultiplier();
+                break;
             case "RED":
                 multiplier = eBands.RED.getMultiplier();
                 break;
@@ -257,7 +294,7 @@ public class Resistor {
                 multiplier = eBands.VIOLET.getMultiplier();
                 break;
             case "GREY":
-                multiplier = eBands.ORANGE.getMultiplier();
+                multiplier = eBands.GREY.getMultiplier();
                 break;
             case "WHITE":
                 multiplier = eBands.WHITE.getMultiplier();
@@ -267,10 +304,81 @@ public class Resistor {
                 break;
             case "SILVER":
                 multiplier = eBands.SILVER.getMultiplier();
+                break;
             default:
                 multiplier = 1.0;
         }
         
         return multiplier;
+    }
+
+    static double getColorTolerance(String color) {
+        double tolerance = 0.0;
+
+        switch(color.toUpperCase().trim()) {
+            case "BROWN":
+                tolerance = eBands.BROWN.getTolerance();
+                break;
+            case "RED":
+                tolerance = eBands.RED.getTolerance();
+                break;
+            case "GREEN":
+                tolerance = eBands.GREEN.getTolerance();
+                break;
+            case "BLUE":
+                tolerance = eBands.BLUE.getTolerance();
+                break;
+            case "VIOLET":
+                tolerance = eBands.VIOLET.getTolerance();
+                break;
+            case "GREY":
+                tolerance = eBands.GREY.getTolerance();
+                break;
+            case "GOLD":
+                tolerance = eBands.GOLD.getTolerance();
+                break;
+            case "SILVER":
+                tolerance = eBands.SILVER.getTolerance();
+                break;
+            default:
+                tolerance = 0.0;
+        }
+        
+        return tolerance;
+    }
+
+    static int getColorTempCoef(String color) {
+        int tc = 0;
+
+        switch(color.toUpperCase().trim()) {
+            case "BLACK":
+                tc = eBands.BLACK.getTempCoef();
+                break;
+            case "RED":
+                tc = eBands.RED.getTempCoef();
+                break;
+            case "ORANGE":
+                tc = eBands.ORANGE.getTempCoef();
+                break;
+            case "YELLOW":
+                tc = eBands.YELLOW.getTempCoef();
+                break;
+            case "GREEN":
+                tc = eBands.GREEN.getTempCoef();
+                break;
+            case "BLUE":
+                tc = eBands.BLUE.getTempCoef();
+                break;
+            case "VIOLET":
+                tc = eBands.VIOLET.getTempCoef();
+                break;
+            case "GREY":
+                tc = eBands.ORANGE.getTempCoef();
+                break;
+            default:
+                tc = 0;
+        }
+        
+        return tc;
     }
 }

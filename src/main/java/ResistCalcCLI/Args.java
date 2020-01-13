@@ -6,47 +6,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Args {
-    // Number of Bands (resistor type)
-    @Parameter(names = {"-b", "--bands"}, 
-            description = "Number of Bands (resistor type). Accepts 3 (default), 4, 5 and 6")
-    private int bands = 3;
 
     // Color (band) Values (from left to right)
-    @Parameter(names = {"-c", "--colors"}, description = "Color (band) Values (from left to right)")
+    @Parameter(names = {"-c", "--color-bands"})
     private List<String> colors = new ArrayList<String>();
 
     // Debug Mode
     // Prints System messages as the program moves through logic
-    @Parameter(names = "--debug", description = "Debug Mode", hidden = true)
+    @Parameter(names = "--debug", hidden = true)
     private boolean debug = false;
     
     // Help or Usage()
     @Parameter(names = "--help", help = true)
     private boolean help = false;
     
-    //Temperature Coefficient of Resistance (PPM)
-    @Parameter(names = {"-p", "--ppm"}) 
-    private int ppm;
-    
+    // Temperature Coefficient
+    @Parameter(names = {"-tc", "--temp-coefficient"}) 
+    private int tempCoef;
+
+    // Resistor Value (translate to color code)
+    @Parameter(names = {"-r", "--resistance-value"}) 
+    private String resistance;    
+
     // Tolerance
     @Parameter(names = {"-t", "--tolerance"}) 
     private double tolerance;
     
     // Ohm Units (K, M, G)
     @Parameter(names = {"-u", "--units"}) 
-    private String units = "O"; // 'O' = ohms
-    
-    // Resistor Value (translate to color code)
-    @Parameter(names = {"-r", "--resistance-value"}) 
-    private String resistance;
+    private String units = "O"; // Ohms
 
-
-    public int getBands() {
-        return bands; // Return the number of bands used
-    }
     
-    public List getColors() {
-        return colors; // Return a list of colors
+    public String[] getColors() {
+        String[] colorsList;
+        
+        if(colors.size() == 0) {
+            colorsList = new String[1]; // If no colors are sent, send one NULL value
+
+        } else if(colors.size() > 6) {
+            colorsList = new String[6]; // Restrict to six color bands
+
+        } else {
+            colorsList = new String[colors.size()];
+        }
+        colorsList = colors.toArray(colorsList);
+        
+        return colorsList; // Return a list of colors
     }
     
     public boolean getDebug() {
@@ -57,8 +62,12 @@ public class Args {
         return help; // Return help status
     }
     
-    public int getPPM() {
-        return ppm; // Return Temperature Coefficient of Resistance (PPM)
+    public int getTempCoef() {
+        return tempCoef; // Return Temperature Coefficient of Resistance (PPM)
+    }
+
+    public String getResistance() {
+        return resistance; // Return Resistor Value
     }
 
     public double getTolerance() {
@@ -66,10 +75,22 @@ public class Args {
     }
 
     public String getUnits() {
+        switch(units) {
+            case "O": // Ohms...
+                break;
+            case "K": // Kilo...
+                break;
+            case "M": // Mega...
+                break;
+            case "G": // Giga...
+                break;
+            default:
+                if(debug == true){
+                    System.out.println("WARNING: Unrecognized unit of measure - defaulting to Ohms");
+                }
+                units = "O"; // Ohms
+        }
+        
         return units; // Return Ohm Units
-    }
-
-    public String getResistance() {
-        return resistance; // Return Resistor Value
     }
 }
