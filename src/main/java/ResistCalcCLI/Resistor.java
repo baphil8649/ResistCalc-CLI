@@ -17,24 +17,24 @@ enum eBands {
         Green       (5)         100K ohms       +/-0.5%         20ppm/K
         Blue        (6)         1M ohms         +/-0.25%        10ppm/K
         Violet      (7)         10M ohms        +/-0.10%        5ppm/K
-        Grey        (8)         100M ohms       +/-0.25%        1ppm/K
+        Grey        (8)         100M ohms       +/-0.05%        1ppm/K
         White       (9)         1G ohms
         Gold                    0.10 ohms       +/-5%
         Silver                  0.01 ohms       +/-10%
     */
     
-    BLACK ("0",     1,          1.0,    250),
-    BROWN ("1",     10,         10.0,   100),
-    RED   ("2",     100,        100.0,  50),
+    BLACK ("0",     1,          0.0,    250),
+    BROWN ("1",     10,         1.0,    100),
+    RED   ("2",     100,        2.0,    50),
     ORANGE("3",     1000,       0.0,    15),
     YELLOW("4",     10000,      0.0,    25),
     GREEN ("5",     100000,     0.5,    20),
     BLUE  ("6",     1000000,    0.25,   10),
     VIOLET("7",     10000000,   0.10,   5),
-    GREY  ("8",     100000000,  0.25,   1),
+    GREY  ("8",     100000000,  0.05,   1),
     WHITE ("9",     1000000000, 0.0,    0),
-    GOLD  ("0",     0.10,       5,      0),
-    SILVER("0",     0.01,       10,     0);
+    GOLD  ("99",    0.10,       5,      0),
+    SILVER("99",    0.01,       10,     0);
     
     private String value;
     private double multiplier;
@@ -89,22 +89,30 @@ public class Resistor {
                 resistance = "ERROR: Color band (" + (idx+1) + ") has invalid color code: " + pColors[idx].toUpperCase() + ".";
                 break;
             }
-            
-            // TODO: Breakout if the first or second band is GOLD or SILVER...
 
             // Translate FIRST color band...
             if(idx == 0) {
-                baseVal = getColorValue(pColors[idx]);
+                if((pColors[idx].toUpperCase().trim() == "GOLD") || (pColors[idx].toUpperCase().trim() == "SILVER")) {
+                    resistance = "ERROR: Color band (" + (idx+1) + ") cannot be GOLD or SILVER.";
+                    break;
+                } else {
+                    baseVal = getColorValue(pColors[idx]);
+                }
             }
             
             // Translate SECOND color band...
             if(idx == 1) {
-                baseVal = baseVal + getColorValue(pColors[idx]);
+                if((pColors[idx].toUpperCase().trim() == "GOLD") || (pColors[idx].toUpperCase().trim() == "SILVER")) {
+                    resistance = "ERROR: Color band (" + (idx+1) + ") cannot be GOLD or SILVER.";
+                    break;
+                } else {
+                    baseVal = baseVal + getColorValue(pColors[idx]);
+                }
             }
 
             // Translate THIRD color band...
             if(idx == 2) {
-                if(pColors.length == 3) {
+                if(pColors.length <= 4) {
                     multiplier = getColorMultiplier(pColors[idx]);
                 } else if(pColors.length > 4) {
                     baseVal = baseVal + getColorValue(pColors[idx]);
@@ -132,36 +140,36 @@ public class Resistor {
         }
         
         // Resistance Value
-        if(resistance != "") {
-          baseNum = Double.parseDouble(baseVal);
+        if(resistance == "") {
+            baseNum = Double.parseDouble(baseVal);
             
-          res = baseNum * multiplier;
-          
-          if(pUnits == "K") {
-              res = res / 1000.0;
-              resistance = BigDecimal.valueOf(res).toPlainString() + "K Ohms";
+            res = baseNum * multiplier;
+            
+            if(pUnits == "K") {
+                res = res / 1000.0;
+                resistance = BigDecimal.valueOf(res).toPlainString() + "K Ohms";
               
-          } else if(pUnits == "M") {
-              res = res / 100000.0;
-              resistance = BigDecimal.valueOf(res).toPlainString() + "M Ohms";
+            } else if(pUnits == "M") {
+                res = res / 1000000.0;
+                resistance = BigDecimal.valueOf(res).toPlainString() + "M Ohms";
               
-          } else if(pUnits == "G") {
-              res = res / 1000000000.0;
-              resistance = BigDecimal.valueOf(res).toPlainString() + "G Ohms";
+            } else if(pUnits == "G") {
+                res = res / 1000000000.0;
+                resistance = BigDecimal.valueOf(res).toPlainString() + "G Ohms";
               
-          } else {
-              resistance = BigDecimal.valueOf(res).toPlainString() + " Ohms";
-          }
+            } else {
+                resistance = BigDecimal.valueOf(res).toPlainString() + " Ohms";
+            }
           
-          // Tolerance
-          if(tolerance != 0.0) {
-              resistance = resistance + " +/-" + tolerance + "%";
-          }
+            // Tolerance
+            if(tolerance != 0.0) {
+                resistance = resistance + " +/-" + tolerance + "%";
+            }
           
-          // Temp. Coefficient
-          if(tempCoef != 0) {
-              resistance = resistance + " " + tempCoef + "ppm/K";
-          }
+            // Temp. Coefficient
+            if(tempCoef != 0) {
+                resistance = resistance + " " + tempCoef + "ppm/K";
+            }
         }
 
         if(pDebug) {
@@ -176,7 +184,7 @@ public class Resistor {
             System.out.println("Temp. Coefficient   : " + tempCoef);
             System.out.println("Resistance          : " + resistance);
             System.out.println("");
-            }
+        }
         
         return resistance;
     }
@@ -256,7 +264,7 @@ public class Resistor {
                 colorVal = eBands.VIOLET.getValue();
                 break;
             case "GREY":
-                colorVal = eBands.ORANGE.getValue();
+                colorVal = eBands.GREY.getValue();
                 break;
             case "WHITE":
                 colorVal = eBands.WHITE.getValue();
@@ -353,6 +361,9 @@ public class Resistor {
         switch(color.toUpperCase().trim()) {
             case "BLACK":
                 tc = eBands.BLACK.getTempCoef();
+                break;
+            case "BROWN":
+                tc = eBands.BROWN.getTempCoef();
                 break;
             case "RED":
                 tc = eBands.RED.getTempCoef();

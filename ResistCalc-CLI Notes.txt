@@ -40,6 +40,8 @@
 
 
 
+
+
 No parameters given...
 "Usage: resistcalc [OPTION] [VALUE(S)]"
 "Try 'resistcalc -help' for more information"
