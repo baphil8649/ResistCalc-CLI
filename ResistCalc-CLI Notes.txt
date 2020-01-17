@@ -1,58 +1,103 @@
 + Big Boys Race Out Young Girls but Violet Generally Wins
 
-+ Resistor Band Types
-  - 3 Band (default)
-    - Number
-    - Number
-    - Multiplier
-  - 4 Band
-    - Number
-    - Number
-    - Multiplier
-    - Tolerance
-  - 5 Band
-    - Number
-    - Number
-    - Number
-    - Multiplier
-    - Tolerance
-  - 6 Band
-    - Number
-    - Number
-    - Number
-    - Multiplier
-    - Tolerance
-    - PPM
+/*
+        Color Codes
+        Color       Value       Multiplier      Tolerance       Temp. Coefficient
+        -------------------------------------------------------------------------
+        Black       (0)         1 ohms                          250ppm/K
+        Brown       (1)         10 ohms         +/-1%           100ppm/K
+        Red         (2)         100 ohms        +/-2%           50ppm/K
+        Orange      (3)         1K ohms                         15ppm/K
+        Yellow      (4)         10K ohms                        25ppm/K
+        Green       (5)         100K ohms       +/-0.5%         20ppm/K
+        Blue        (6)         1M ohms         +/-0.25%        10ppm/K
+        Violet      (7)         10M ohms        +/-0.10%        5ppm/K
+        Grey        (8)         100M ohms       +/-0.05%        1ppm/K
+        White       (9)         1G ohms
+        Gold                    0.10 ohms       +/-5%
+        Silver                  0.01 ohms       +/-10%
+*/
 
-+ General Colors (colors, value, multiplier, tolerance, ppm)
-  - Black   (0)     1 ohms                  250ppm/K
-  - Brown   (1)     10 ohms     +/-1%       100ppm/K
-  - Red     (2)     100 ohms    +/-2%       50ppm/K
-  - Orange  (3)     1K ohms                 15ppm/K
-  - Yellow  (4)     10K ohms                25ppm/K
-  - Green   (5)     100K ohms   +/-0.5%     20ppm/K
-  - Blue    (6)     1M ohms     +/-0.25%    10ppm/K
-  - Violet  (7)     10M ohms    +/-0.10%    5ppm/K
-  - Grey    (8)     100M ohms   +/-0.25%    1ppm/K
-  - White   (9)     1G ohms
-  - Gold            0.10 ohms   +/-5%
-  - Silver          0.01 ohms   +/-10%
+//String[] testArgs = {"-c", "black", "--debug"};
+//String[] testArgs = {"-c", "black, brown", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black, black", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black, brown", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black, red", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black, orange", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black, yellow", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black, green", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black, violet", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black, grey", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black, white", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black, gold", "--debug"};
+//String[] testArgs = {"-c", "black, brown, black, silver", "--debug"};
+        
+//String[] testArgs = {"-c", "black, brown, brown", "--debug"};
+//String[] testArgs = {"-c", "black, brown, red", "--debug"};
+//String[] testArgs = {"-c", "black, brown, orange", "--debug"};
+//String[] testArgs = {"-c", "black, brown, yellow", "--debug"};
+//String[] testArgs = {"-c", "black, brown, green", "--debug"};
+//String[] testArgs = {"-c", "black, brown, violet", "--debug"};
+//String[] testArgs = {"-c", "black, brown, grey", "--debug"};
+//String[] testArgs = {"-c", "black, brown, white", "--debug"};
+//String[] testArgs = {"-c", "black, brown, gold", "--debug"};
+//String[] testArgs = {"-c", "black, brown, silver", "--debug"};
 
+//String[] testArgs = {"-c", "black, red", "--debug"};
+//String[] testArgs = {"-c", "black, orange", "--debug"};
+//String[] testArgs = {"-c", "black, yellow", "--debug"};
+//String[] testArgs = {"-c", "black, green", "--debug"};
+//String[] testArgs = {"-c", "black, violet", "--debug"};
+//String[] testArgs = {"-c", "black, grey", "--debug"};
+//String[] testArgs = {"-c", "black, white", "--debug"};
+//String[] testArgs = {"-c", "black, gold", "--debug"};
+//String[] testArgs = {"-c", "black, silver", "--debug"};
 
+//String[] testArgs = {"-c", "brown", "--debug"};
+//String[] testArgs = {"-c", "rEd", "--debug"};
+//String[] testArgs = {"-c", "orange", "--debug"};
+//String[] testArgs = {"-c", "YeLLoW", "--debug"};
+//String[] testArgs = {"-c", "green", "--debug"};
+//String[] testArgs = {"-c", "violet", "--debug"};
+//String[] testArgs = {"-c", "grey", "--debug"};
+//String[] testArgs = {"-c", "white", "--debug"};
+//String[] testArgs = {"-c", "gold", "--debug"};
+//String[] testArgs = {"-c", "gold", "--debug"};
+//String[] testArgs = {"-c", "silver", "--debug"};
 
+//String[] testArgs = {"-c", "brown, gold", "--debug"};
 
+//String[] testArgs = {"-c", "green, yellow, yellow, brown", "-u", "K", "--debug"};
 
-No parameters given...
-"Usage: resistcalc [OPTION] [VALUE(S)]"
-"Try 'resistcalc -help' for more information"
+//String[] testArgs = {"-c", "blue, red, brown, silver", "--debug"};
 
-Get help...
--help <topic> or prints a man page
+//String[] testArgs = {"-c", "yellow, orange, orange, gold, red", "--debug"};
 
-Signify band type...
--b or -band <value of 3, 4, 5 or 6>
-Default is 3
-Requires three or more colors value
+//String[] testArgs = {"-c", "blue, red, violet, blue, green, brown", "-u", "M", "--debug"};
+
+//String[] testArgs = {"-c", "grey, green, red, brown, gold, yellow", "-u", "K", "--debug"};
+
+//String[] testArgs = {"-c", "orange, grey, blue, green, blue, brown", "-u", "M", "--debug"};
+
+//String[] testArgs = {"-c", "white, white, white, violet, violet, yellow", "-u", "M", "--debug"};
+
+//String[] testArgs = {"-c", "blue, green, grey, green, red, red", "-u", "M", "--debug"};
+//String[] testArgs = {"-c", "black, green, red", "--debug"};
+//String[] testArgs = {"-c", "white, white, white, red, red", "--debug"};
+//String[] testArgs = {"-c", "blue, red, orange, green, green, black", "-u", "K", "--debug"};
+//String[] testArgs = {"-c", "blue, red", "--debug"};
+//String[] testArgs = {"-c", "blue, glob", "--debug"};
+//String[] testArgs = {"-c", "gold, blue, red", "--debug"};
+//String[] testArgs = {"-c", "blue, silver, red", "--debug"};
+//String[] testArgs = {"-c", "gold, silver, red", "--debug"};
+//String[] testArgs = {"-u", "K", "--debug"};
+//String[] testArgs = {"-c", ",", "-u", "K", "--debug"};
+//String[] testArgs = {"-v", "300M", "-t", ".5", "-p", "100"};
+//String[] testArgs = {"--help"};
+//String[] testArgs = {};
+//String[] testArgs = {""};
+//String[] testArgs = {" "};
 
 Signify Color Values
 -c or -colors <comma delimited values? or array? red, green, blue, etc.>
@@ -98,7 +143,7 @@ Install Method?
 
 Removal Method?
 
-
+Easter-egg?
 //System.out.println(" Resistance is FUTILE!  ");
 //System.out.println("       ___________      ");
 //System.out.println("      /-/_"/-/_/-/|     ");

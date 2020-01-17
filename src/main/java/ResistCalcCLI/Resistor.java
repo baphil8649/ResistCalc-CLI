@@ -23,18 +23,18 @@ enum eBands {
         Silver                  0.01 ohms       +/-10%
     */
     
-    BLACK ("0",     1,          0.0,    250),
-    BROWN ("1",     10,         1.0,    100),
-    RED   ("2",     100,        2.0,    50),
-    ORANGE("3",     1000,       0.0,    15),
-    YELLOW("4",     10000,      0.0,    25),
-    GREEN ("5",     100000,     0.5,    20),
-    BLUE  ("6",     1000000,    0.25,   10),
-    VIOLET("7",     10000000,   0.10,   5),
-    GREY  ("8",     100000000,  0.05,   1),
-    WHITE ("9",     1000000000, 0.0,    0),
-    GOLD  ("99",    0.10,       5,      0),
-    SILVER("99",    0.01,       10,     0);
+    BLACK ("0",     1,              0.0,    250),
+    BROWN ("1",     10,             1.0,    100),
+    RED   ("2",     100,            2.0,    50),
+    ORANGE("3",     1000,           0.0,    15),
+    YELLOW("4",     10000,          0.0,    25),
+    GREEN ("5",     100000,         0.5,    20),
+    BLUE  ("6",     1000000,        0.25,   10),
+    VIOLET("7",     10000000,       0.10,   5),
+    GREY  ("8",     100000000,      0.05,   1),
+    WHITE ("9",     1000000000,     0.0,    0),
+    GOLD  ("99",    0.10,           5,      0),
+    SILVER("99",    0.01,           10,     0);
     
     private String value;
     private double multiplier;
@@ -57,11 +57,11 @@ enum eBands {
         return this.tempCoef;
     }
     
-    private eBands(String value, double multiplier, double tolerance, int pmm) {
+    private eBands(String value, double multiplier, double tolerance, int tc) {
         this.value = value;
         this.multiplier = multiplier;
         this.tolerance = tolerance;
-        this.tempCoef = pmm;
+        this.tempCoef = tc;
     }
 }
 
@@ -92,7 +92,7 @@ public class Resistor {
 
             // Translate FIRST color band...
             if(idx == 0) {
-                if((pColors[idx].toUpperCase().trim() == "GOLD") || (pColors[idx].toUpperCase().trim() == "SILVER")) {
+                if((pColors[idx].toUpperCase().trim().equals("GOLD")) || (pColors[idx].toUpperCase().trim().equals("SILVER"))) {
                     resistance = "ERROR: Color band (" + (idx+1) + ") cannot be GOLD or SILVER.";
                     break;
                 } else {
@@ -102,7 +102,7 @@ public class Resistor {
             
             // Translate SECOND color band...
             if(idx == 1) {
-                if((pColors[idx].toUpperCase().trim() == "GOLD") || (pColors[idx].toUpperCase().trim() == "SILVER")) {
+                if((pColors[idx].toUpperCase().trim().equals("GOLD")) || (pColors[idx].toUpperCase().trim().equals("SILVER"))) {
                     resistance = "ERROR: Color band (" + (idx+1) + ") cannot be GOLD or SILVER.";
                     break;
                 } else {
@@ -140,21 +140,24 @@ public class Resistor {
         }
         
         // Resistance Value
-        if(resistance == "") {
+        if(resistance.equals("")) {
             baseNum = Double.parseDouble(baseVal);
             
             res = baseNum * multiplier;
             
-            if(pUnits == "K") {
-                res = res / 1000.0;
+            if(pUnits.equals("K")) {
+                res /= 1000.0;
                 resistance = BigDecimal.valueOf(res).toPlainString() + "K Ohms";
-              
-            } else if(pUnits == "M") {
-                res = res / 1000000.0;
+                if(pDebug) {
+                    System.out.println("In K units...");
+                }
+
+            } else if(pUnits.equals("M")) {
+                res /= 1000000.0;
                 resistance = BigDecimal.valueOf(res).toPlainString() + "M Ohms";
               
-            } else if(pUnits == "G") {
-                res = res / 1000000000.0;
+            } else if(pUnits.equals("G")) {
+                res /= 1000000000.0;
                 resistance = BigDecimal.valueOf(res).toPlainString() + "G Ohms";
               
             } else {

@@ -12,92 +12,9 @@ public class ResistCalc {
         ResistCalc rCalc = new ResistCalc();
         
         // Test cases...
-        //String[] testArgs = {"-c", "black", "--debug"};
-        //String[] testArgs = {"-c", "black, brown", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black, black", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black, brown", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black, red", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black, orange", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black, yellow", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black, green", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black, violet", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black, grey", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black, white", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black, gold", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, black, silver", "--debug"};
-        
-        //String[] testArgs = {"-c", "black, brown, brown", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, red", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, orange", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, yellow", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, green", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, violet", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, grey", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, white", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, gold", "--debug"};
-        //String[] testArgs = {"-c", "black, brown, silver", "--debug"};
-        
-        
-        
-        
-        //String[] testArgs = {"-c", "black, red", "--debug"};
-        //String[] testArgs = {"-c", "black, orange", "--debug"};
-        //String[] testArgs = {"-c", "black, yellow", "--debug"};
-        //String[] testArgs = {"-c", "black, green", "--debug"};
-        //String[] testArgs = {"-c", "black, violet", "--debug"};
-        //String[] testArgs = {"-c", "black, grey", "--debug"};
-        //String[] testArgs = {"-c", "black, white", "--debug"};
-        //String[] testArgs = {"-c", "black, gold", "--debug"};
-        //String[] testArgs = {"-c", "black, silver", "--debug"};
-        
-        
-        //String[] testArgs = {"-c", "brown", "--debug"};
-        //String[] testArgs = {"-c", "rEd", "--debug"};
-        //String[] testArgs = {"-c", "orange", "--debug"};
-        //String[] testArgs = {"-c", "YeLLoW", "--debug"};
-        //String[] testArgs = {"-c", "green", "--debug"};
-        //String[] testArgs = {"-c", "violet", "--debug"};
-        //String[] testArgs = {"-c", "grey", "--debug"};
-        //String[] testArgs = {"-c", "white", "--debug"};
-        //String[] testArgs = {"-c", "gold", "--debug"};
-        //String[] testArgs = {"-c", "gold", "--debug"};
-        //String[] testArgs = {"-c", "silver", "--debug"};
-        
-        //String[] testArgs = {"-c", "brown, gold", "--debug"};
-
-        //String[] testArgs = {"-c", "green, yellow, yellow, brown", "-u", "K", "--debug"};
-        
-        //String[] testArgs = {"-c", "blue, red, brown, silver", "--debug"};
-        
-        //String[] testArgs = {"-c", "yellow, orange, orange, gold, red", "--debug"};
-        
-        //String[] testArgs = {"-c", "blue, red, violet, blue, green, brown", "-u", "M", "--debug"};
-        
-        //String[] testArgs = {"-c", "grey, green, red, brown, gold, yellow", "-u", "K", "--debug"};
-        
         //String[] testArgs = {"-c", "orange, grey, blue, green, blue, brown", "-u", "M", "--debug"};
-        
-        //String[] testArgs = {"-c", "white, white, white, violet, violet, yellow", "-u", "M", "--debug"};
-        
-        //String[] testArgs = {"-c", "blue, green, grey, green, red, red", "-u", "M", "--debug"}; // TODO: replace testArgs with args
-        //String[] testArgs = {"-c", "black, green, red", "--debug"};
-        //String[] testArgs = {"-c", "white, white, white, red, red", "--debug"};
-        //String[] testArgs = {"-c", "blue, red, orange, green, green, black", "-u", "K", "--debug"};
-        //String[] testArgs = {"-c", "blue, red", "--debug"};
-        //String[] testArgs = {"-c", "blue, glob", "--debug"};
-        //String[] testArgs = {"-c", "gold, blue, red", "--debug"};
-        //String[] testArgs = {"-c", "blue, silver, red", "--debug"};
-        //String[] testArgs = {"-c", "gold, silver, red", "--debug"};
-        String[] testArgs = {"-u", "K", "--debug"};
-        //String[] testArgs = {"-c", ",", "-u", "K", "--debug"};
-        //String[] testArgs = {"-v", "300M", "-t", ".5", "-p", "100"};
-        //String[] testArgs = {"--help"};
-        //String[] testArgs = {};
-        //String[] testArgs = {""};
-        //String[] testArgs = {" "};
 
-        if(testArgs.length != 0) {  // TODO: replace testArgs with args
+        if(args.length != 0) {  // TODO: replace testArgs with args
 
             try {
                 // Arge (arguments) and JCommander class objects
@@ -105,7 +22,7 @@ public class ResistCalc {
                 JCommander jc = new JCommander(paramArgs);
             
                 // Parse argument for parameters
-                jc.newBuilder().addObject(paramArgs).build().parse(testArgs);
+                jc.newBuilder().addObject(paramArgs).build().parse(args);
             
                 // Get band colors
                 // Limit bands to the number specified in bandsVal
@@ -118,7 +35,7 @@ public class ResistCalc {
 
                 // Get resistance units
                 // For displaying calculated value
-                // O = ohms (default)
+                // O = Ohms (default)
                 // K = Kiloohms
                 // M = Megaohms
                 // G = Gigaohms
@@ -185,12 +102,30 @@ public class ResistCalc {
         System.out.println("NAME\n"
                          + "    ResistCalc-CLI v1.0.0 - Resistor Calculator Command Line Interface Application\n\n"
                          + "SYNOPSIS\n"
-                         + "    resistcalc [OPTION]... <VALUE>...\n\n"
+                         + "    resistcalc [OPTION] VALUE(s)...\n\n"
                          + "DESCRIPTION\n"
-                         + "    ResistCalc blah balh blah...\n\n"
+                         + "    ResistCalc is a command-line application for calculating the electrical resistance\n"
+                         + "    of axial-lead (through hole) resistors. ResistCalc will also attempt to calculate\n"
+                         + "    the color band values based on a given resistance value, tolerance and/or temperature\n"
+                         + "    coefficient.\n\n"
                          + "OPTIONS\n"
-                         + "    -b, --bands\n"
-                         + "        Blah blah blah...\n\n"
+                         + "    --help Outputs a usage message and exit.\n\n"
+                         + "    -c,  --color-bands\n"
+                         + "           Blah blah blah...\n\n"
+                         + "    -r,  --resistance-value\n"
+                         + "           Blah blah blah...\n\n"
+                         + "    -t,  --tolerance\n"
+                         + "           Blah blah blah...\n\n"
+                         + "    -tc, --temp-coefficient\n"
+                         + "           Blah blah blah...\n\n"
+                         + "    -u,  --units\n"
+                         + "           Blah blah blah...\n\n"
+                         + "EXAMPLES\n"
+                         + "    resistcalc -c red,green,blue\n"
+                         + "        Outputs: 25000000 Ohms\n\n"
+                         + "    resistcalc -c orange,grey,blue,green,blue,brown -u M\n"
+                         + "        Outputs: 38.6M Ohms +/-0.25% 100ppm/K\n\n"
+                         + "    resistcalc -r 300 -u K\n\n"
                          + "SOURCE\n"
                          + "    https://github.com/baphil8649/ResistCalc-CLI");
     } // end helpTextLong

@@ -40,10 +40,7 @@ public class Args {
     public String[] getColors() {
         String[] colorsList;
         
-        if(colors.size() == 0) {
-            colorsList = new String[1]; // If no colors are sent, send one NULL value
-
-        } else if(colors.size() > 6) {
+        if(colors.size() > 6) {
             colorsList = new String[6]; // Restrict to six color bands
 
         } else {
@@ -75,7 +72,7 @@ public class Args {
     }
 
     public String getUnits() {
-        switch(units) {
+        switch(units.toUpperCase()) {
             case "O": // Ohms...
                 break;
             case "K": // Kilo...
@@ -91,6 +88,6 @@ public class Args {
                 units = "O"; // Ohms
         }
         
-        return units; // Return Ohm Units
+        return units.toUpperCase(); // Return Ohm Units
     }
 }
