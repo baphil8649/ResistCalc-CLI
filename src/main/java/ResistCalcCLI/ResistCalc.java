@@ -10,20 +10,31 @@ public class ResistCalc {
 
     public static void main(String[] args) {
         ResistCalc rCalc = new ResistCalc();
+        Args paramArgs = new Args();
+        
+        boolean except = false;
         
         // Test cases...
         //String[] testArgs = {"-c", "orange, grey, blue, green, blue, brown", "-u", "M", "--debug"};
+        //String[] testArgs = {"-c", "brown, red, brown, blue, brown, yellow", "-u", "M", "--debug"};
+        //String[] testArgs = {"-u", "M", "--debug"};
+        
+        String[] testArgs = {"-r", "300", "-u", "K", "--debug"};
 
-        if(args.length != 0) {  // TODO: replace testArgs with args
-
+        if(testArgs.length != 0) {  // TODO: replace testArgs with args
             try {
-                // Arge (arguments) and JCommander class objects
-                Args paramArgs = new Args();
+                // Args (arguments) and JCommander class objects
                 JCommander jc = new JCommander(paramArgs);
             
-                // Parse argument for parameters
-                jc.newBuilder().addObject(paramArgs).build().parse(args);
-            
+                // Parse arguments for parameters
+                jc.newBuilder().addObject(paramArgs).build().parse(testArgs);
+                
+            } catch (Exception e) {
+                except = true;
+            } // end JCommander try
+
+
+            if(except == false) { // Ensure JCommander could parse arguments
                 // Get band colors
                 // Limit bands to the number specified in bandsVal
                 String[] colors = paramArgs.getColors();
@@ -65,68 +76,68 @@ public class ResistCalc {
                     System.out.println("Debug Ind         : " + debugInd);
                     System.out.println("Help Ind          : " + helpInd);
                     System.out.println("");
-                }   // ...end debug arguments
+                } // ...end debug arguments
                 
                 if(!helpInd) {
                     Resistor r1 = new Resistor();
                 
                     if(colors.length > 0) { // Translate color bands to resistance value
-                        System.out.println(r1.translateToValue(colors, units, debugInd));
+                        System.out.println(r1.colorsToResistance(colors, units, debugInd));
                     
                     } else if(resistance.length() > 0) { // Translate resistance to color bands
-                        System.out.println(r1.translateToColors(resistance, units, tolerance, tempCoef, debugInd));
+                        System.out.println(r1.resistanceToColors(resistance, units, tolerance, tempCoef, debugInd));
                     
-                    } else { // Something went wrong, display a short help text
-                        rCalc.helpTextShort();
+                    } else { // Something else went wrong, display a short help text
+                        rCalc.helpTextError("Try 'resistcalc --help' for more information.");
                     } // end of colors or resistnace if
                 
-                } else { // Help was requested, display short man page
-                    rCalc.helpTextLong();
+                } else { // Help was requested, display detailed help text (man-ish page)
+                    rCalc.helpTextDetail();
                 } // end of if(!helpInd)
                 
-            } catch (Exception e) {
-                rCalc.helpTextShort();
-            } // end of main try
+            } else { // JCommander was not able to parse the arguments
+                rCalc.helpTextError("Error: Unable to parse arguments.");
+            }
 
-        } else { // No parameters given, display a short help text
-            rCalc.helpTextShort();
-        } // end main if
+        } else { // No parameters given
+            rCalc.helpTextError("Error: No arguments given.");
+        } // end main (testArgs.length != 0)
     } // end main method
 
-    public void helpTextShort() {
+    public void helpTextError(String error) {
         System.out.println("Usage: resistcalc [OPTION]... [VALUE]...\n"
-                             + "Try 'resistcalc --help' for more information.");
+                           + error);
     } // end helpTextShort
     
-    public void helpTextLong() {
+    public void helpTextDetail() {
         System.out.println("NAME\n"
-                         + "    ResistCalc-CLI v1.0.0 - Resistor Calculator Command Line Interface Application\n\n"
-                         + "SYNOPSIS\n"
-                         + "    resistcalc [OPTION] VALUE(s)...\n\n"
-                         + "DESCRIPTION\n"
-                         + "    ResistCalc is a command-line application for calculating the electrical resistance\n"
-                         + "    of axial-lead (through hole) resistors. ResistCalc will also attempt to calculate\n"
-                         + "    the color band values based on a given resistance value, tolerance and/or temperature\n"
-                         + "    coefficient.\n\n"
-                         + "OPTIONS\n"
-                         + "    --help Outputs a usage message and exit.\n\n"
-                         + "    -c,  --color-bands\n"
-                         + "           Blah blah blah...\n\n"
-                         + "    -r,  --resistance-value\n"
-                         + "           Blah blah blah...\n\n"
-                         + "    -t,  --tolerance\n"
-                         + "           Blah blah blah...\n\n"
-                         + "    -tc, --temp-coefficient\n"
-                         + "           Blah blah blah...\n\n"
-                         + "    -u,  --units\n"
-                         + "           Blah blah blah...\n\n"
-                         + "EXAMPLES\n"
-                         + "    resistcalc -c red,green,blue\n"
-                         + "        Outputs: 25000000 Ohms\n\n"
-                         + "    resistcalc -c orange,grey,blue,green,blue,brown -u M\n"
-                         + "        Outputs: 38.6M Ohms +/-0.25% 100ppm/K\n\n"
-                         + "    resistcalc -r 300 -u K\n\n"
-                         + "SOURCE\n"
-                         + "    https://github.com/baphil8649/ResistCalc-CLI");
-    } // end helpTextLong
+                           + "    ResistCalc-CLI v1.0.0 - Resistor Calculator Command Line Interface Application\n\n"
+                           + "SYNOPSIS\n"
+                           + "    resistcalc [OPTION] VALUE(s)...\n\n"
+                           + "DESCRIPTION\n"
+                           + "    ResistCalc is a command-line application for calculating the electrical resistance\n"
+                           + "    of axial-lead (through hole) resistors. ResistCalc will also attempt to calculate\n"
+                           + "    the color band values based on a given resistance value, tolerance and/or temperature\n"
+                           + "    coefficient.\n\n"
+                           + "OPTIONS\n"
+                           + "    --help Outputs a detailed usage message and exit.\n\n"
+                           + "    -c,  --color-bands\n"
+                           + "           Blah blah blah...\n\n"
+                           + "    -r,  --resistance-value\n"
+                           + "           Blah blah blah...\n\n"
+                           + "    -t,  --tolerance\n"
+                           + "           Blah blah blah...\n\n"
+                           + "    -tc, --temp-coefficient\n"
+                           + "           Blah blah blah...\n\n"
+                           + "    -u,  --units\n"
+                           + "           Blah blah blah...\n\n"
+                           + "EXAMPLES\n"
+                           + "    resistcalc -c red,green,blue\n"
+                           + "        Outputs: 25000000 Ohms\n\n"
+                           + "    resistcalc -c orange,grey,blue,green,blue,brown -u M\n"
+                           + "        Outputs: 38.6M Ohms +/-0.25% 100ppm/K\n\n"
+                           + "    resistcalc -r 300 -u K\n\n"
+                           + "SOURCE\n"
+                           + "    https://github.com/baphil8649/ResistCalc-CLI");
+    } // end helpTextDetail
 }

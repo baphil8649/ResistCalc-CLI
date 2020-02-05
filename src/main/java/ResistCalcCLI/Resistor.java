@@ -2,6 +2,7 @@ package ResistCalcCLI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.math.BigDecimal;
 
 enum eBands {
@@ -33,8 +34,8 @@ enum eBands {
     VIOLET("7",     10000000,       0.10,   5),
     GREY  ("8",     100000000,      0.05,   1),
     WHITE ("9",     1000000000,     0.0,    0),
-    GOLD  ("99",    0.10,           5,      0),
-    SILVER("99",    0.01,           10,     0);
+    GOLD  ("A",     0.10,           5,      0),
+    SILVER("B",     0.01,           10,     0);
     
     private String value;
     private double multiplier;
@@ -57,17 +58,56 @@ enum eBands {
         return this.tempCoef;
     }
     
-    private eBands(String value, double multiplier, double tolerance, int tc) {
+    private eBands(String value, double multiplier, double tolerance, int tempCoef) {
         this.value = value;
         this.multiplier = multiplier;
         this.tolerance = tolerance;
-        this.tempCoef = tc;
+        this.tempCoef = tempCoef;
     }
 }
 
 public class Resistor {
-
-    public String translateToValue(String[] pColors, String pUnits, boolean pDebug) {    
+    // HashMaps used for calculating resistance from color codes...
+    HashMap<String, String> colorValue = new HashMap<>();
+    HashMap<String, Double> colorMultiplier = new HashMap<>();
+    HashMap<String, Double> colorTolerance = new HashMap<>();
+    HashMap<String, Integer> colorTempCoef = new HashMap<>();
+    
+    // HashMaps used for calculating color codes form resistance...
+    HashMap<Character, String> valueColor = new HashMap<>();
+    HashMap<Double, String> toleranceColor = new HashMap<>();
+    HashMap<Integer, String> tempCoefColor = new HashMap<>();
+    
+    // Array of valid colors
+    ArrayList<String> bandValues = new ArrayList<>();
+    
+    public Resistor() {
+        bandValues.add("BLACK");
+        bandValues.add("BROWN");
+        bandValues.add("RED");
+        bandValues.add("ORANGE");
+        bandValues.add("YELLOW");
+        bandValues.add("GREEN");
+        bandValues.add("BLUE");
+        bandValues.add("VIOLET");
+        bandValues.add("GREY");
+        bandValues.add("WHITE");
+        bandValues.add("GOLD");
+        bandValues.add("SILVER");
+        
+        for(eBands band : eBands.values()) {
+            colorValue.put(band.toString(), band.getValue());
+            colorMultiplier.put(band.toString(), band.getMultiplier());
+            colorTolerance.put(band.toString(), band.getTolerance());
+            colorTempCoef.put(band.toString(), band.getTempCoef());
+            
+            valueColor.put(band.getValue().charAt(0), band.toString()); // OMG that's so ugly...but imma do it!
+            toleranceColor.put(band.getTolerance(), band.toString());
+            tempCoefColor.put(band.getTempCoef(), band.toString());
+        }
+    }
+    
+    public String colorsToResistance(String[] pColors, String pUnits, boolean pDebug) {    
         String baseVal = "";
         double baseNum = 0.0;
         double res = 0.0;
@@ -85,57 +125,58 @@ public class Resistor {
             }
             
             // Breakout if one of the bands is not a valid color code...
-            if(!validateColor(pColors[idx])) {
-                resistance = "ERROR: Color band (" + (idx+1) + ") has invalid color code: " + pColors[idx].toUpperCase() + ".";
+            //if(!validateColor(pColors[idx])) {
+            if(!bandValues.contains(pColors[idx])) {
+                resistance = "ERROR: Color band (" + (idx+1) + ") has invalid color code: " + pColors[idx] + ".";
                 break;
             }
 
             // Translate FIRST color band...
             if(idx == 0) {
-                if((pColors[idx].toUpperCase().trim().equals("GOLD")) || (pColors[idx].toUpperCase().trim().equals("SILVER"))) {
+                if((pColors[idx].equals("GOLD")) || (pColors[idx].equals("SILVER"))) {
                     resistance = "ERROR: Color band (" + (idx+1) + ") cannot be GOLD or SILVER.";
                     break;
                 } else {
-                    baseVal = getColorValue(pColors[idx]);
+                    baseVal = colorValue.get(pColors[idx]);
                 }
             }
             
             // Translate SECOND color band...
             if(idx == 1) {
-                if((pColors[idx].toUpperCase().trim().equals("GOLD")) || (pColors[idx].toUpperCase().trim().equals("SILVER"))) {
+                if((pColors[idx].equals("GOLD")) || (pColors[idx].equals("SILVER"))) {
                     resistance = "ERROR: Color band (" + (idx+1) + ") cannot be GOLD or SILVER.";
                     break;
                 } else {
-                    baseVal = baseVal + getColorValue(pColors[idx]);
+                    baseVal = baseVal + colorValue.get(pColors[idx]);
                 }
             }
 
             // Translate THIRD color band...
             if(idx == 2) {
                 if(pColors.length <= 4) {
-                    multiplier = getColorMultiplier(pColors[idx]);
+                    multiplier = colorMultiplier.get(pColors[idx]);
                 } else if(pColors.length > 4) {
-                    baseVal = baseVal + getColorValue(pColors[idx]);
+                    baseVal = baseVal + colorValue.get(pColors[idx]);
                 }
             }
             
             // Translate FOURTH color band...
             if(idx == 3) {
                 if(pColors.length == 4) {
-                    tolerance = getColorTolerance(pColors[idx]);
+                    tolerance = colorTolerance.get(pColors[idx]);
                 } else if(pColors.length > 4) {
-                    multiplier = getColorMultiplier(pColors[idx]);
+                    multiplier = colorMultiplier.get(pColors[idx]);
                 }
             }
             
             // Translate FIFTH color band...
             if(idx == 4) {
-                tolerance = getColorTolerance(pColors[idx]);
+                tolerance = colorTolerance.get(pColors[idx]);
             }
             
             // Translate SIXTH color band...
             if(idx == 5) {
-                tempCoef = getColorTempCoef(pColors[idx]);
+                tempCoef = colorTempCoef.get(pColors[idx]);
             }
         }
         
@@ -148,18 +189,15 @@ public class Resistor {
             if(pUnits.equals("K")) {
                 res /= 1000.0;
                 resistance = BigDecimal.valueOf(res).toPlainString() + "K Ohms";
-                if(pDebug) {
-                    System.out.println("In K units...");
-                }
-
+                
             } else if(pUnits.equals("M")) {
                 res /= 1000000.0;
                 resistance = BigDecimal.valueOf(res).toPlainString() + "M Ohms";
-              
+                
             } else if(pUnits.equals("G")) {
                 res /= 1000000000.0;
                 resistance = BigDecimal.valueOf(res).toPlainString() + "G Ohms";
-              
+                
             } else {
                 resistance = BigDecimal.valueOf(res).toPlainString() + " Ohms";
             }
@@ -178,7 +216,7 @@ public class Resistor {
         if(pDebug) {
             System.out.println("- Color Bands Translation -");
             System.out.println("---------------------------");
-            System.out.println("Band Colors (Param) : " + Arrays.toString(pColors).toUpperCase());
+            System.out.println("Band Colors (Param) : " + Arrays.toString(pColors));
             System.out.println("Units (Param)       : " + pUnits);
             System.out.println("Base Value          : " + baseVal);
             System.out.println("Base Number         : " + baseNum);
@@ -187,212 +225,55 @@ public class Resistor {
             System.out.println("Temp. Coefficient   : " + tempCoef);
             System.out.println("Resistance          : " + resistance);
             System.out.println("");
-        }
+        } // ...end debug arguments
         
         return resistance;
-    }
-    
-    public ArrayList translateToColors(String pValue, String pUnits, double pTolerance, int pPmm, boolean pDebug) {
-        ArrayList<String> colors = new ArrayList<String>();
+    } // end of colorsToResistance
+
+    public String resistanceToColors(String pResistance, String pUnits, double pTolerance, int pTempCoef, boolean pDebug) {
+        String colors = pResistance;
+        /*
+        String band1 = "";
+        String band2 = "";
+        String band3 = "";
+        String band4 = "";
+        String band5 = "";
+        String band6 = "";
         
-        colors.add("RED");
-        colors.add("GREEN");
-        colors.add("BLUE");
-        
+        if(pResistance.length() <= 3) {
+            
+            for(int idx = 0; idx < pResistance.length(); idx++) {
+                // First base value...
+                switch(idx) {
+                    case 0:
+                        band1 = valueColor.get(pResistance.charAt(idx));
+                        break;
+                    case 1:
+                        band2 = valueColor.get(pResistance.charAt(idx));
+                        break;
+                    case 2:
+                        band3 = valueColor.get(pResistance.charAt(idx));
+                }
+            }
+        }
+        */
+
+        if(pDebug) {
+            System.out.println("- Resistance Value Translation -");
+            System.out.println("--------------------------------");
+            System.out.println("Base Resistance (Param)   : " + pResistance);
+            System.out.println("Units (Param)             : " + pUnits);
+            System.out.println("Tolerance (Param)         : " + pTolerance);
+            System.out.println("Temp. Coefficient (Param) : " + pTempCoef);
+            System.out.println("Band Char 1               : " + pResistance.charAt(0));
+            System.out.println("Band Char 2               : " + pResistance.charAt(1));
+            System.out.println("Band Char 3               : " + pResistance.charAt(2));
+            //System.out.println("Band 1                    : " + band1);
+            //System.out.println("Band 2                    : " + band2);
+            //System.out.println("Band 3                    : " + band3);
+            System.out.println("");
+        } // ...end debug arguments
+
         return colors;
-    }
-
-    static boolean validateColor(String color) {
-        boolean validInd = true;
-
-        switch(color.toUpperCase().trim()) {
-            case "BLACK":
-                break;
-            case "BROWN":
-                break;
-            case "RED":
-                break;
-            case "ORANGE":
-                break;
-            case "YELLOW":
-                break;
-            case "GREEN":
-                break;
-            case "BLUE":
-                break;
-            case "VIOLET":
-                break;
-            case "GREY":
-                break;
-            case "WHITE":
-                break;
-            case "GOLD":
-                break;
-            case "SILVER":
-                break;
-            default:
-                validInd = false;
-        }
-        
-        return validInd;
-    }
-    
-    // Gets color value associated to enum object
-    static String getColorValue(String color) {
-        String colorVal = "";
-
-        switch(color.toUpperCase().trim()) {
-            case "BLACK":
-                colorVal = eBands.BLACK.getValue();
-                break;
-            case "BROWN":
-                colorVal = eBands.BROWN.getValue();
-                break;
-            case "RED":
-                colorVal = eBands.RED.getValue();
-                break;
-            case "ORANGE":
-                colorVal = eBands.ORANGE.getValue();
-                break;
-            case "YELLOW":
-                colorVal = eBands.YELLOW.getValue();
-                break;
-            case "GREEN":
-                colorVal = eBands.GREEN.getValue();
-                break;
-            case "BLUE":
-                colorVal = eBands.BLUE.getValue();
-                break;
-            case "VIOLET":
-                colorVal = eBands.VIOLET.getValue();
-                break;
-            case "GREY":
-                colorVal = eBands.GREY.getValue();
-                break;
-            case "WHITE":
-                colorVal = eBands.WHITE.getValue();
-        }
-        
-        return colorVal;
-    }
-
-    static double getColorMultiplier(String color) {
-        double multiplier = 1.0;
-
-        switch(color.toUpperCase().trim()) {
-            case "BLACK":
-                multiplier = eBands.BLACK.getMultiplier();
-                break;
-            case "BROWN":
-                multiplier = eBands.BROWN.getMultiplier();
-                break;
-            case "RED":
-                multiplier = eBands.RED.getMultiplier();
-                break;
-            case "ORANGE":
-                multiplier = eBands.ORANGE.getMultiplier();
-                break;
-            case "YELLOW":
-                multiplier = eBands.YELLOW.getMultiplier();
-                break;
-            case "GREEN":
-                multiplier = eBands.GREEN.getMultiplier();
-                break;
-            case "BLUE":
-                multiplier = eBands.BLUE.getMultiplier();
-                break;
-            case "VIOLET":
-                multiplier = eBands.VIOLET.getMultiplier();
-                break;
-            case "GREY":
-                multiplier = eBands.GREY.getMultiplier();
-                break;
-            case "WHITE":
-                multiplier = eBands.WHITE.getMultiplier();
-                break;
-            case "GOLD":
-                multiplier = eBands.GOLD.getMultiplier();
-                break;
-            case "SILVER":
-                multiplier = eBands.SILVER.getMultiplier();
-                break;
-            default:
-                multiplier = 1.0;
-        }
-        
-        return multiplier;
-    }
-
-    static double getColorTolerance(String color) {
-        double tolerance = 0.0;
-
-        switch(color.toUpperCase().trim()) {
-            case "BROWN":
-                tolerance = eBands.BROWN.getTolerance();
-                break;
-            case "RED":
-                tolerance = eBands.RED.getTolerance();
-                break;
-            case "GREEN":
-                tolerance = eBands.GREEN.getTolerance();
-                break;
-            case "BLUE":
-                tolerance = eBands.BLUE.getTolerance();
-                break;
-            case "VIOLET":
-                tolerance = eBands.VIOLET.getTolerance();
-                break;
-            case "GREY":
-                tolerance = eBands.GREY.getTolerance();
-                break;
-            case "GOLD":
-                tolerance = eBands.GOLD.getTolerance();
-                break;
-            case "SILVER":
-                tolerance = eBands.SILVER.getTolerance();
-                break;
-            default:
-                tolerance = 0.0;
-        }
-        
-        return tolerance;
-    }
-
-    static int getColorTempCoef(String color) {
-        int tc = 0;
-
-        switch(color.toUpperCase().trim()) {
-            case "BLACK":
-                tc = eBands.BLACK.getTempCoef();
-                break;
-            case "BROWN":
-                tc = eBands.BROWN.getTempCoef();
-                break;
-            case "RED":
-                tc = eBands.RED.getTempCoef();
-                break;
-            case "ORANGE":
-                tc = eBands.ORANGE.getTempCoef();
-                break;
-            case "YELLOW":
-                tc = eBands.YELLOW.getTempCoef();
-                break;
-            case "GREEN":
-                tc = eBands.GREEN.getTempCoef();
-                break;
-            case "BLUE":
-                tc = eBands.BLUE.getTempCoef();
-                break;
-            case "VIOLET":
-                tc = eBands.VIOLET.getTempCoef();
-                break;
-            case "GREY":
-                tc = eBands.ORANGE.getTempCoef();
-                break;
-            default:
-                tc = 0;
-        }
-        
-        return tc;
-    }
+    } // end of resistanceToColors
 }
