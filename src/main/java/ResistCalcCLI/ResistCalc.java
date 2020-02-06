@@ -17,9 +17,19 @@ public class ResistCalc {
         // Test cases...
         //String[] testArgs = {"-c", "orange, grey, blue, green, blue, brown", "-u", "M", "--debug"};
         //String[] testArgs = {"-c", "brown, red, brown, blue, brown, yellow", "-u", "M", "--debug"};
+        //String[] testArgs = {"-c", "white, white, white, white, brown, brown", "--debug"};
         //String[] testArgs = {"-u", "M", "--debug"};
+        //String[] testArgs = {"-c", "orange, grey, blue, brown, brown, gold", "--debug"};
         
-        String[] testArgs = {"-r", "300", "-u", "K", "--debug"};
+        //String[] testArgs = {"-r", "000000000000", "--debug"};
+        //String[] testArgs = {"-r", "10000", "--debug"};
+        //String[] testArgs = {"-r", "1000", "--debug"};
+        //String[] testArgs = {"-r", "100", "--debug"};
+        String[] testArgs = {"-r", "10", "--debug"};
+        //String[] testArgs = {"-r", "1", "--debug"};
+        //String[] testArgs = {"-r", "999000000000", "--debug"};
+        //String[] testArgs = {"-r", "999100000000", "--debug"};
+        //String[] testArgs = {"-r", "323", "--debug"};
 
         if(testArgs.length != 0) {  // TODO: replace testArgs with args
             try {
@@ -85,7 +95,7 @@ public class ResistCalc {
                         System.out.println(r1.colorsToResistance(colors, units, debugInd));
                     
                     } else if(resistance.length() > 0) { // Translate resistance to color bands
-                        System.out.println(r1.resistanceToColors(resistance, units, tolerance, tempCoef, debugInd));
+                        System.out.println(r1.resistanceToColors(resistance, tolerance, tempCoef, debugInd));
                     
                     } else { // Something else went wrong, display a short help text
                         rCalc.helpTextError("Try 'resistcalc --help' for more information.");
@@ -96,11 +106,11 @@ public class ResistCalc {
                 } // end of if(!helpInd)
                 
             } else { // JCommander was not able to parse the arguments
-                rCalc.helpTextError("Error: Unable to parse arguments.");
+                rCalc.helpTextError("ERROR:Unable to parse arguments.");
             }
 
         } else { // No parameters given
-            rCalc.helpTextError("Error: No arguments given.");
+            rCalc.helpTextError("ERROR:No arguments given.");
         } // end main (testArgs.length != 0)
     } // end main method
 

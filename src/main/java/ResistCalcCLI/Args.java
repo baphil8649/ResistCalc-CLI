@@ -56,8 +56,16 @@ public class Args {
     }
 
     public String getResistance() {
-        if(resistance.matches(".*[a-zA-Z]+.*") == true) {
+        //if(resistance.matches(".*[a-zA-Z]+.*") == true) {
+        //    resistance = "HELP";
+        //}
+        
+        if(resistance.matches("^[0-9]+$") == false) { // Numerical values only
             resistance = "HELP";
+        }
+        
+        if(resistance.length() > 12) { // Restrict to twelve digits
+            resistance = resistance.substring(0, 12);
         }
         
         return resistance;
