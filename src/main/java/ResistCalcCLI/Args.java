@@ -61,7 +61,7 @@ public class Args {
         //}
         
         if(resistance.matches("^[0-9]+$") == false) { // Numerical values only
-            resistance = "HELP";
+            resistance = "NOTNUMERIC";
         }
         
         if(resistance.length() > 12) { // Restrict to twelve digits

@@ -6,23 +6,23 @@ import java.util.HashMap;
 import java.math.BigDecimal;
 
 enum eBands {
-    /*
-        Color Codes
-        Color       Value       Multiplier      Tolerance       Temp. Coefficient
-        -------------------------------------------------------------------------
-        Black       (0)         1 ohms                          250ppm/K
-        Brown       (1)         10 ohms         +/-1%           100ppm/K
-        Red         (2)         100 ohms        +/-2%           50ppm/K
-        Orange      (3)         1K ohms                         15ppm/K
-        Yellow      (4)         10K ohms                        25ppm/K
-        Green       (5)         100K ohms       +/-0.5%         20ppm/K
-        Blue        (6)         1M ohms         +/-0.25%        10ppm/K
-        Violet      (7)         10M ohms        +/-0.10%        5ppm/K
-        Grey        (8)         100M ohms       +/-0.05%        1ppm/K
-        White       (9)         1G ohms
-        Gold                    0.10 ohms       +/-5%
-        Silver                  0.01 ohms       +/-10%
-    */
+/*
+    Color Codes
+    Color       Value       Multiplier      Tolerance       Temp. Coefficient
+    -------------------------------------------------------------------------
+    BLACK       0           1 ohms                          250ppm/K
+    BROWN       1           10 ohms         +/-1%           100ppm/K
+    RED         2           100 ohms        +/-2%           50ppm/K
+    ORANGE      3           1K ohms                         15ppm/K
+    YELLOW      4           10K ohms                        25ppm/K
+    GREEN       5           100K ohms       +/-0.5%         20ppm/K
+    BLUE        6           1M ohms         +/-0.25%        10ppm/K
+    VIOLET      7           10M ohms        +/-0.10%        5ppm/K
+    GREY        8           100M ohms       +/-0.05%        1ppm/K
+    WHITE       9           1G ohms
+    GOLD                    0.10 ohms       +/-5%
+    SILVER                  0.01 ohms       +/-10%
+*/
     
     BLACK ("0",     1.0,              0.0,    250),
     BROWN ("1",     10.0,             1.0,    100),
@@ -200,19 +200,19 @@ public class Resistor {
             
             res = baseNum * multiplier;
             
-            if(pUnits.equals("K")) {
+            if(pUnits.equals("K")) { // Return in Kiloohms
                 res /= 1000.0;
                 resistance = BigDecimal.valueOf(res).toPlainString() + "K Ohms";
                 
-            } else if(pUnits.equals("M")) {
+            } else if(pUnits.equals("M")) { // Return in Megaohms
                 res /= 1000000.0;
                 resistance = BigDecimal.valueOf(res).toPlainString() + "M Ohms";
                 
-            } else if(pUnits.equals("G")) {
+            } else if(pUnits.equals("G")) { // Return in Gigaohms
                 res /= 1000000000.0;
                 resistance = BigDecimal.valueOf(res).toPlainString() + "G Ohms";
                 
-            } else {
+            } else { // Return in Ohms
                 resistance = BigDecimal.valueOf(res).toPlainString() + " Ohms";
             }
             
@@ -257,69 +257,106 @@ public class Resistor {
         String toleranceBand = "";
         String tempCoefBand = "";
         
-        try { // Translate resistnace string to double value...
-            resistanceNum = Double.parseDouble(pResistance);
+        if(!pResistance.equals("NOTNUMERIC")) {
             
-        } catch (Exception e) { // In theory this shouldn't happen
-            colors = "ERROR:Unable to read resistance value as numeric.";
-        } // end JCommander try
+            try { // Translate resistnace string to double value...
+                resistanceNum = Double.parseDouble(pResistance);
+
+            } catch (Exception e) {
+                colors = "ERROR:Unable to read resistance value as numeric.";
+            } // end JCommander try
         
-        // Check if the resistance value is zero; single BLACK band resistor
-        if(resistanceNum == 0.0) {
-            colors = valueColor.get('0');
-            multiplierNum = resistanceNum;
-        }
+            // Check if the resistance value is zero; single BLACK band resistor
+            if(resistanceNum == 0.0) {
+                colors = "BLACK";
+                multiplierNum = resistanceNum;
+            }
         
-        // Find multiplier value...
-        while(multiplierNum >= 1.0) {
-            if((resistanceNum % multiplierNum) == 0.0) {
-                multiplierBand = multiplierColor.get(multiplierNum);
-                baseNum = resistanceNum / multiplierNum;
-                break;
+            // Find multiplier value...
+            while(multiplierNum >= 1.0) {
+                if((resistanceNum % multiplierNum) == 0.0) {
+                    baseNum = resistanceNum / multiplierNum;
+                    break;
                 
-            } else {
+                } else {
+                    multiplierNum /= 10.0;
+                }
+            } // end of multiplier while
+        
+            if(baseNum > 999.0) { // Ensure that base number is not over three digits long
+                colors = "ERROR:Non-practical resistor value for calculating band colors.";
+            
+            } else if(baseNum == 1.0) { // Where resistance value is eqaul to a multiplier (10000, 1000, 10, etc)
+                baseVal = BigDecimal.valueOf(resistanceNum).toPlainString();
+            
+            } else if((baseNum > 10.0) && (baseNum < 100.0)) { // Adjust base number and multiplier for values less than 100
+                baseNum *= 10.0;
                 multiplierNum /= 10.0;
+                baseVal = BigDecimal.valueOf(baseNum).toPlainString();
+                
+            } else if((baseNum > 1.0) && (baseNum < 10.0)) { // Adjust base number and multiplier for values less than 10
+                baseNum *= 100.0;
+                multiplierNum /= 100.0;
+                baseVal = BigDecimal.valueOf(baseNum).toPlainString();
+                
+            } else { // All other standard resistance values
+                baseVal = BigDecimal.valueOf(baseNum).toPlainString();
             }
-        } // end of multiplier while
-        
-        // Ensure that base number is not over three digits long...
-        if(baseNum > 999.0) {
-            colors = "ERROR:Non-practical resistor value for calculating band colors.";
-            
-        } else if(baseNum == 1.0) {
-            baseVal = BigDecimal.valueOf(resistanceNum).toPlainString();
-            
-            if(multiplierNum >= 1000.0) {
-                band1 = valueColor.get(baseVal.charAt(0));
-                band2 = valueColor.get(baseVal.charAt(1));
-                band3 = valueColor.get(baseVal.charAt(2));
-                multiplierBand = multiplierColor.get(multiplierNum / 100.0);
+
+            if(resistanceNum == multiplierNum) { // Same as baseNum == 1.0 scenario
+                multiplierBand = multiplierColor.getOrDefault((multiplierNum / 100.0), "");
+            } else {
+                multiplierBand = multiplierColor.get(multiplierNum);
             }
+
+            // Translate to color bands if no errors have been found
+            if(colors.equals("")) {
+                // Translate bands 1, 2, and 3
+                band1 = valueColor.getOrDefault(baseVal.charAt(0), "BLACK");
+                band2 = valueColor.getOrDefault(baseVal.charAt(1), "BLACK");
+                band3 = valueColor.getOrDefault(baseVal.charAt(2), "BLACK");
+
+                // Translate tolerance band (defaults to BROWN or +/-1%)
+                if(pTolerance != 0.0) {
+                    toleranceBand = toleranceColor.getOrDefault(pTolerance, "BROWN");
+                } else {
+                    toleranceBand = "BROWN";
+                }
             
+                // Translate temp. coefficient band
+                if(pTempCoef != 0) {
+                    tempCoefBand = tempCoefColor.getOrDefault(pTempCoef, "");
+                }
+            
+                // Build color bands
+                colors = band1 + "," + band2 + "," + band3 + "," + multiplierBand + "," + toleranceBand;
+            
+                // Add temp. coefficient band if valid
+                if(!tempCoefBand.equals("")) {
+                    colors += "," + tempCoefBand;
+                }
+            }
         } else {
-            baseVal = BigDecimal.valueOf(baseNum).toPlainString();
-        }
-        
-        if(colors.equals("")) {
-            colors = "TDB";
+            colors = "ERROR:Non-numeric resistance value passed.";
         }
                 
         if(pDebug) {
             System.out.println("- Resistance Value Translation -");
             System.out.println("--------------------------------");
-            System.out.println("Base Resistance (Param)   : " + pResistance);
-            System.out.println("Tolerance (Param)         : " + pTolerance);
-            System.out.println("Temp. Coefficient (Param) : " + pTempCoef);
-            System.out.println("Resistance Number         : " + resistanceNum);
-            System.out.println("Base Number (Double)      : " + baseNum);
-            System.out.println("Base Value (String)       : " + baseVal);
-            System.out.println("Band 1                    : " + band1);
-            System.out.println("Band 2                    : " + band2);
-            System.out.println("Band 3                    : " + band3);
-            System.out.println("Multiplier Band           : " + multiplierBand);
-            System.out.println("Tolerance Band            : " + toleranceBand);
-            System.out.println("Temp. Coefficient Band    : " + tempCoefBand);
-            System.out.println("Colors                    : " + colors);
+            System.out.println("Base Resistance (Param)    : " + pResistance);
+            System.out.println("Tolerance (Param)          : " + pTolerance);
+            System.out.println("Temp. Coefficient (Param)  : " + pTempCoef);
+            System.out.println("Resistance Number          : " + resistanceNum);
+            System.out.println("Base Number (Double)       : " + baseNum);
+            System.out.println("Base Value (String)        : " + baseVal);
+            System.out.println("Multiplier Number (Double) : " + multiplierNum);
+            System.out.println("Band 1                     : " + band1);
+            System.out.println("Band 2                     : " + band2);
+            System.out.println("Band 3                     : " + band3);
+            System.out.println("Multiplier Band            : " + multiplierBand);
+            System.out.println("Tolerance Band             : " + toleranceBand);
+            System.out.println("Temp. Coefficient Band     : " + tempCoefBand);
+            System.out.println("Colors                     : " + colors);
             System.out.println("");
         } // ...end debug arguments
 

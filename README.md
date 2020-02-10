@@ -1,2 +1,2 @@
 # ResistCalc-CLI
- Resistor Calculator Command Line Interface Application
+Resistor Calculator Command Line Interface Application

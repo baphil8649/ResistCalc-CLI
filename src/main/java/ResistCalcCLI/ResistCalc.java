@@ -13,31 +13,14 @@ public class ResistCalc {
         Args paramArgs = new Args();
         
         boolean except = false;
-        
-        // Test cases...
-        //String[] testArgs = {"-c", "orange, grey, blue, green, blue, brown", "-u", "M", "--debug"};
-        //String[] testArgs = {"-c", "brown, red, brown, blue, brown, yellow", "-u", "M", "--debug"};
-        //String[] testArgs = {"-c", "white, white, white, white, brown, brown", "--debug"};
-        //String[] testArgs = {"-u", "M", "--debug"};
-        //String[] testArgs = {"-c", "orange, grey, blue, brown, brown, gold", "--debug"};
-        
-        //String[] testArgs = {"-r", "000000000000", "--debug"};
-        //String[] testArgs = {"-r", "10000", "--debug"};
-        //String[] testArgs = {"-r", "1000", "--debug"};
-        //String[] testArgs = {"-r", "100", "--debug"};
-        String[] testArgs = {"-r", "10", "--debug"};
-        //String[] testArgs = {"-r", "1", "--debug"};
-        //String[] testArgs = {"-r", "999000000000", "--debug"};
-        //String[] testArgs = {"-r", "999100000000", "--debug"};
-        //String[] testArgs = {"-r", "323", "--debug"};
 
-        if(testArgs.length != 0) {  // TODO: replace testArgs with args
+        if(args.length != 0) {
             try {
                 // Args (arguments) and JCommander class objects
                 JCommander jc = new JCommander(paramArgs);
             
                 // Parse arguments for parameters
-                jc.newBuilder().addObject(paramArgs).build().parse(testArgs);
+                jc.newBuilder().addObject(paramArgs).build().parse(args);
                 
             } catch (Exception e) {
                 except = true;
@@ -106,7 +89,7 @@ public class ResistCalc {
                 } // end of if(!helpInd)
                 
             } else { // JCommander was not able to parse the arguments
-                rCalc.helpTextError("ERROR:Unable to parse arguments.");
+                rCalc.helpTextError("ERROR:Invalid argument(s). Unable to parse.");
             }
 
         } else { // No parameters given
@@ -121,7 +104,7 @@ public class ResistCalc {
     
     public void helpTextDetail() {
         System.out.println("NAME\n"
-                           + "    ResistCalc-CLI v1.0.0 - Resistor Calculator Command Line Interface Application\n\n"
+                           + "    ResistCalc-CLI - Resistor Calculator Command Line Interface Application\n\n"
                            + "SYNOPSIS\n"
                            + "    resistcalc [OPTION] VALUE(s)...\n\n"
                            + "DESCRIPTION\n"
@@ -130,23 +113,59 @@ public class ResistCalc {
                            + "    the color band values based on a given resistance value, tolerance and/or temperature\n"
                            + "    coefficient.\n\n"
                            + "OPTIONS\n"
-                           + "    --help Outputs a detailed usage message and exit.\n\n"
+                           + "    --debug   Displays debug information.\n"
+                           + "    --help    Outputs a detailed usage message and exit. Overrides all other options listed.\n\n"
                            + "    -c,  --color-bands\n"
-                           + "           Blah blah blah...\n\n"
+                           + "           Translate resistnace from color bands. Allows up to six bands in a comma delimited list.\n"
+                           + "           Overrides translating color codes from resistance (-r) if both options provided.\n"
+                           + "           See COLOR CODE AND BAND REFERENCE for all acceptable values.\n\n"
                            + "    -r,  --resistance-value\n"
-                           + "           Blah blah blah...\n\n"
+                           + "           Translate color band codes from resistance in ohms. As a disclaimer, this assumes a five band\n"
+                           + "           resistor with a default tolerance of +/-1% (BROWN) and may not be a pratical for real-world\n"
+                           + "           application. A sixth band can be applied by defining a temp. coefficient value (-tc).\n\n"
                            + "    -t,  --tolerance\n"
-                           + "           Blah blah blah...\n\n"
+                           + "           Tolerance value of resistor when translating color bands from resistance (-r).\n"
+                           + "           See COLOR CODE AND BAND REFERENCE for all acceptable values.\n\n"
                            + "    -tc, --temp-coefficient\n"
-                           + "           Blah blah blah...\n\n"
+                           + "           Temperature coefficient value of resistor when translating color bands from resistance (-r).\n"
+                           + "           See COLOR CODE AND BAND REFERENCE for all acceptable values.\n\n"
                            + "    -u,  --units\n"
-                           + "           Blah blah blah...\n\n"
+                           + "           Formats the the resistance to a standard unit of measure when translating resistance from color bands (-c).\n"
+                           + "           Acceptable values are:\n"
+                           + "             O = Ohms (default if not specified)\n"
+                           + "             K = Kiloohms\n"
+                           + "             M = Megaohms\n"
+                           + "             G = Gigaohms\n\n"
+                           + "RESISTOR BAND AND COLOR CODE REFERENCE\n"
+                           + "    Color       Value       Multiplier      Tolerance       Temp. Coefficient\n"
+                           + "    -------------------------------------------------------------------------\n"
+                           + "    BLACK       0           1 ohms                          250ppm/K\n"
+                           + "    BROWN       1           10 ohms         +/-1%           100ppm/K\n"
+                           + "    RED         2           100 ohms        +/-2%           50ppm/K\n"
+                           + "    ORANGE      3           1K ohms                         15ppm/K\n"
+                           + "    YELLOW      4           10K ohms                        25ppm/K\n"
+                           + "    GREEN       5           100K ohms       +/-0.5%         20ppm/K\n"
+                           + "    BLUE        6           1M ohms         +/-0.25%        10ppm/K\n"
+                           + "    VIOLET      7           10M ohms        +/-0.10%        5ppm/K\n"
+                           + "    GREY        8           100M ohms       +/-0.05%        1ppm/K\n"
+                           + "    WHITE       9           1G ohms\n"
+                           + "    GOLD                    0.10 ohms       +/-5%\n"
+                           + "    SILVER                  0.01 ohms       +/-10%\n\n"
+                           + "    # of Bands    Band 1      Band 2      Band 3      Band 4      Band 5      Band 6\n"
+                           + "    --------------------------------------------------------------------------------\n"
+                           + "    3             Value       Value       Multiplier  N/A         N/A         N/A\n"
+                           + "    4             Value       Value       Multiplier  Tolerance   N/A         N/A\n"
+                           + "    5             Value       Value       Value       Multiplier  Tolerance   N/A\n"
+                           + "    6             Value       Value       Value       Multiplier  Tolerance   Temp. Coefficient\n\n"
                            + "EXAMPLES\n"
                            + "    resistcalc -c red,green,blue\n"
                            + "        Outputs: 25000000 Ohms\n\n"
                            + "    resistcalc -c orange,grey,blue,green,blue,brown -u M\n"
                            + "        Outputs: 38.6M Ohms +/-0.25% 100ppm/K\n\n"
-                           + "    resistcalc -r 300 -u K\n\n"
+                           + "    resistcalc -r 38600000 -t .25 -tc 100\n"
+                           + "        Outputs: ORANGE,GREY,BLUE,GREEN,BLUE,BROWN\n\n"
+                           + "VERSION\n"
+                           + "    1.0-0\n\n"
                            + "SOURCE\n"
                            + "    https://github.com/baphil8649/ResistCalc-CLI");
     } // end helpTextDetail

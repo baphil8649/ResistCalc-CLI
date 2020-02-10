@@ -1,0 +1,10 @@
+#!/bin/bash
+rcArgs=""
+sp=" "
+
+for arg in "$@"
+do
+  rcArgs=$rcArgs$sp$arg
+done
+
+java -jar ResistCalc-CLI.jar $rcArgs
