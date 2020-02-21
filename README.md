@@ -33,15 +33,11 @@ As a bonus for this project, ResistCalc-CLI can also translate from a resistance
 ## How to install...
 ResistCalc-CLI will run on both Windows and Unix/Linux systems. Start by downloading the zip file from the distributions directory [here](https://github.com/baphil8649/ResistCalc-CLI/tree/master/build/distributions) to any folder and unzip the files.  Once unziped, navigate down to the `\ResistCalc-CLI\bin` directory.  From here you can execute ResistCalc-CLI from either Windows PowerShell
 
-<p align="center">
-  <img src="https://github.com/baphil8649/ResistCalc-CLI/blob/master/images/powershel-example.png">
-</p>
+![enter image description here](https://github.com/baphil8649/ResistCalc-CLI/blob/master/images/powershel-example.png)
 
 or terminal emulator in Unix and Linux
 
-<p align="center">
-  <img src="https://github.com/baphil8649/ResistCalc-CLI/blob/master/images/bash-example.png">
-</p>
+![enter image description here](https://github.com/baphil8649/ResistCalc-CLI/blob/master/images/bash-example.png)
 
 > If running from a Unix or Linux shell only (with no GUI) you will need to clone the repository locally using Git. Git can be installed using your distributions repository (apt, yum, pacman, etc)
 
@@ -69,4 +65,5 @@ or terminal emulator in Unix and Linux
 |M    |Mega-ohms  |
 |G    |Giga-ohms  |
 #### EXAMPLES
+
 ## Credit where credit is due...
