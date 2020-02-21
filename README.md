@@ -33,18 +33,40 @@ As a bonus for this project, ResistCalc-CLI can also translate from a resistance
 ## How to install...
 ResistCalc-CLI will run on both Windows and Unix/Linux systems. Start by downloading the zip file from the distributions directory [here](https://github.com/baphil8649/ResistCalc-CLI/tree/master/build/distributions) to any folder and unzip the files.  Once unziped, navigate down to the `\ResistCalc-CLI\bin` directory.  From here you can execute ResistCalc-CLI from either Windows PowerShell
 
+<p align="center">
+  <img src="https://github.com/baphil8649/ResistCalc-CLI/blob/master/images/powershel-example.png">
+</p>
+
 or terminal emulator in Unix and Linux
 
-> If running from a Unix or Linux shell only (with no GUI) you will need to clone the repository locally using Git. Git can be installed using your distribution's repository of choice (apt, yum, pacman, etc)
+<p align="center">
+  <img src="https://github.com/baphil8649/ResistCalc-CLI/blob/master/images/bash-example.png">
+</p>
+
+> If running from a Unix or Linux shell only (with no GUI) you will need to clone the repository locally using Git. Git can be installed using your distributions repository (apt, yum, pacman, etc)
 
 ## Usage...
 #### SYNOPSIS
     ResistCalc-CLI [OPTION] VALUE(s)...
 #### OPTIONS
 `--debug`	Displays debug information while executing a given command.
-`--help`	Outputs a detailed usage message and exits. Overrides all other options listed.
-`-c,  --color-bands`	Translate resistance from color bands. Allows up to six bands in a comma delimited list.  Overrides translating color codes from resistance (`-r`) if both commands given.
-`-r,  --resistance-value`	Translate color band codes from resistance in ohms.  As a disclaimer, this assumes a five band resistor with a default tolerance of +/-1% (BROWN) and may not be a pratical for real-world application.  A sixth band can be applied by defining a temp. coefficient value (`-tc`).
-#### EXAMPLES
 
+`--help`	Outputs a detailed usage message and exits.  Overrides all other options listed.
+
+`-c,  --color-bands`	Translate resistance from color bands.  Allows up to six bands in a comma delimited list.  Overrides translating color codes from resistance (`-r`) if both commands given.
+
+`-r,  --resistance-value`	Translate color band codes from resistance in ohms.  As a disclaimer, this assumes a five band resistor with a default tolerance of +/-1% (BROWN) and may not be a piratical for real-world application.  A sixth band can be applied by defining a temp. coefficient value (`-tc`).
+
+`-t,  --tolerance`	Tolerance value of resistor when translating color bands from resistance (`-r`).
+
+`-tc, --temp-coefficient`	Temperature coefficient value of resistor when translating color bands from resistance (`-r`).
+
+`-u,  --units`	Formats the the resistance to a standard unit of measure when translating resistance from color bands (`-c`). Acceptable values are:
+|Value|Description|
+|-----|-----------|
+|O    |Ohms (default)|
+|K    |Kilo-ohms  |
+|M    |Mega-ohms  |
+|G    |Giga-ohms  |
+#### EXAMPLES
 ## Credit where credit is due...
