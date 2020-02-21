@@ -1,4 +1,3 @@
-
 //String[] testArgs = {"-c", "black", "--debug"};
 //String[] testArgs = {"-c", "black, brown", "--debug"};
 //String[] testArgs = {"-c", "black, brown, black", "--debug"};
@@ -13,7 +12,6 @@
 //String[] testArgs = {"-c", "black, brown, black, white", "--debug"};
 //String[] testArgs = {"-c", "black, brown, black, gold", "--debug"};
 //String[] testArgs = {"-c", "black, brown, black, silver", "--debug"};
-        
 //String[] testArgs = {"-c", "black, brown, brown", "--debug"};
 //String[] testArgs = {"-c", "black, brown, red", "--debug"};
 //String[] testArgs = {"-c", "black, brown, orange", "--debug"};
@@ -24,7 +22,6 @@
 //String[] testArgs = {"-c", "black, brown, white", "--debug"};
 //String[] testArgs = {"-c", "black, brown, gold", "--debug"};
 //String[] testArgs = {"-c", "black, brown, silver", "--debug"};
-
 //String[] testArgs = {"-c", "black, red", "--debug"};
 //String[] testArgs = {"-c", "black, orange", "--debug"};
 //String[] testArgs = {"-c", "black, yellow", "--debug"};
@@ -34,7 +31,6 @@
 //String[] testArgs = {"-c", "black, white", "--debug"};
 //String[] testArgs = {"-c", "black, gold", "--debug"};
 //String[] testArgs = {"-c", "black, silver", "--debug"};
-
 //String[] testArgs = {"-c", "brown", "--debug"};
 //String[] testArgs = {"-c", "rEd", "--debug"};
 //String[] testArgs = {"-c", "orange", "--debug"};
@@ -46,23 +42,14 @@
 //String[] testArgs = {"-c", "gold", "--debug"};
 //String[] testArgs = {"-c", "gold", "--debug"};
 //String[] testArgs = {"-c", "silver", "--debug"};
-
 //String[] testArgs = {"-c", "brown, gold", "--debug"};
-
 //String[] testArgs = {"-c", "green, yellow, yellow, brown", "-u", "K", "--debug"};
-
 //String[] testArgs = {"-c", "blue, red, brown, silver", "--debug"};
-
 //String[] testArgs = {"-c", "yellow, orange, orange, gold, red", "--debug"};
-
 //String[] testArgs = {"-c", "blue, red, violet, blue, green, brown", "-u", "M", "--debug"};
-
 //String[] testArgs = {"-c", "grey, green, red, brown, gold, yellow", "-u", "K", "--debug"};
-
 //String[] testArgs = {"-c", "orange, grey, blue, green, blue, brown", "-u", "M", "--debug"};
-
 //String[] testArgs = {"-c", "white, white, white, violet, violet, yellow", "-u", "M", "--debug"};
-
 //String[] testArgs = {"-c", "blue, green, grey, green, red, red", "-u", "M", "--debug"};
 //String[] testArgs = {"-c", "black, green, red", "--debug"};
 //String[] testArgs = {"-c", "white, white, white, red, red", "--debug"};
@@ -80,49 +67,6 @@
 //String[] testArgs = {""};
 //String[] testArgs = {" "};
 
-Signify Color Values
--c or -colors <comma delimited values? or array? red, green, blue, etc.>
-
-Signify ohms (K, M, G) Units
--u or units <K, M or G>
-Default is ohms
-
-Signify Value (translate to color code)
--v or -value <value of resistor: 200 - 3K - 201M - etc.>
-
-Signify Tolerance Value (when using -v)
--t or -tolerance <.25, .5, etc.>
-
-Signify Temperature Coefficient of Resistance (PPM)
--p <100>
-
-
-EXAMPLES...
-Return value for a four band resistor of red, black, yellow:
-resistcalc -b 4 -c red black yellow
-- returns 20000 ohms
-
-Return value for a five band resistor of green, brown, red, orange and red:
-resistcalc -b 5 -c green brown red orange red
-- returns 512000 ohms +/-2% Tolerance
-
-Return value for a four band resistor of violet, black and blue in K ohms
-resistcalc -c violet black blue -u M
-- returns 70M ohms
-
-Return color codes for resistor value of 348K ohms:
-resistcalc -v 348K
-- return Orange-Yellow-Grey-Orange
-
-
-Install Method?
-- .deb
-- .rpm
-- .exe or msi
-- .pkg
-- .zip (with install script)
-
-Removal Method?
 
 Easter-egg?
 //System.out.println(" Resistance is FUTILE!  ");

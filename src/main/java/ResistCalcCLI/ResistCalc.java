@@ -81,7 +81,7 @@ public class ResistCalc {
                         System.out.println(r1.resistanceToColors(resistance, tolerance, tempCoef, debugInd));
                     
                     } else { // Something else went wrong, display a short help text
-                        rCalc.helpTextError("Try 'resistcalc --help' for more information.");
+                        rCalc.helpTextError("Try 'ResistCalc-CLI --help' for more information.");
                     } // end of colors or resistnace if
                 
                 } else { // Help was requested, display detailed help text (man-ish page)
@@ -98,7 +98,7 @@ public class ResistCalc {
     } // end main method
 
     public void helpTextError(String error) {
-        System.out.println("Usage: resistcalc [OPTION]... [VALUE]...\n"
+        System.out.println("Usage: ResistCalc-CLI [OPTION]... [VALUE]...\n"
                            + error);
     } // end helpTextShort
     
@@ -106,12 +106,12 @@ public class ResistCalc {
         System.out.println("NAME\n"
                            + "    ResistCalc-CLI - Resistor Calculator Command Line Interface Application\n\n"
                            + "SYNOPSIS\n"
-                           + "    resistcalc [OPTION] VALUE(s)...\n\n"
+                           + "    ResistCalc-CLI [OPTION] VALUE(s)...\n\n"
                            + "DESCRIPTION\n"
-                           + "    ResistCalc is a command-line application for calculating the electrical resistance\n"
-                           + "    of axial-lead (through hole) resistors. ResistCalc will also attempt to calculate\n"
-                           + "    the color band values based on a given resistance value, tolerance and/or temperature\n"
-                           + "    coefficient.\n\n"
+                           + "    ResistCalc-CLI is a command-line application for calculating the electrical resistance\n"
+                           + "    of axial-lead (through hole) resistors from a given color code. ResistCalc-CLI will also\n"
+                           + "    attempt to calculate the color band values based on a given resistance value, tolerance\n"
+                           + "    and/or temperature coefficient.\n\n"
                            + "OPTIONS\n"
                            + "    --debug   Displays debug information.\n"
                            + "    --help    Outputs a detailed usage message and exit. Overrides all other options listed.\n\n"
@@ -158,11 +158,11 @@ public class ResistCalc {
                            + "    5             Value       Value       Value       Multiplier  Tolerance   N/A\n"
                            + "    6             Value       Value       Value       Multiplier  Tolerance   Temp. Coefficient\n\n"
                            + "EXAMPLES\n"
-                           + "    resistcalc -c red,green,blue\n"
+                           + "    ResistCalc-CLI -c red,green,blue\n"
                            + "        Outputs: 25000000 Ohms\n\n"
-                           + "    resistcalc -c orange,grey,blue,green,blue,brown -u M\n"
+                           + "    ResistCalc-CLI -c orange,grey,blue,green,blue,brown -u M\n"
                            + "        Outputs: 38.6M Ohms +/-0.25% 100ppm/K\n\n"
-                           + "    resistcalc -r 38600000 -t .25 -tc 100\n"
+                           + "    ResistCalc-CLI -r 38600000 -t .25 -tc 100\n"
                            + "        Outputs: ORANGE,GREY,BLUE,GREEN,BLUE,BROWN\n\n"
                            + "VERSION\n"
                            + "    1.0-0\n\n"

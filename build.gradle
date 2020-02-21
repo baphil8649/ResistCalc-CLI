@@ -2,7 +2,6 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'application'
 
-
 description = 'Resistor Calculator Command Line Interface Application'
 
 mainClassName = 'ResistCalcCLI.ResistCalc'
@@ -23,11 +22,8 @@ jar {
         )
     }
     
-    //println(project.name)
-    
     doFirst {
         from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     }
     exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
 }
-
