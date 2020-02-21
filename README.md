@@ -12,7 +12,7 @@ As noted above, a resistor's resistance value can be calculated by reading the c
   <img src="https://github.com/baphil8649/ResistCalc-CLI/blob/master/images/resistor-band-color-reference.png">
 </p>
 
-When reading resistor bands the type of value represented will change depending on the number of color bands applied to the resistor.  The most common resistors usually have between three and six bands.  Below is another table that defines how each color band should be defined based on how many bands are given and ultimately tells us how to translate the band colors into an actual resistance value.
+When reading resistor bands, the type of value represented will change depending on the number of color bands applied to the resistor.  The most common resistors usually have between three and six bands.  Below is another table that defines how each color band should be defined based on how many bands are given and ultimately tells us how to translate the band colors into an actual resistance value.
 
 <p align="center">
   <img src="https://github.com/baphil8649/ResistCalc-CLI/blob/master/images/resistor-band-number-reference.png">
@@ -20,14 +20,31 @@ When reading resistor bands the type of value represented will change depending 
 
 This is how ResistCalc-CLI will calculate the resistor value for a given number of color bands.
 
-For example, if given a set of resistance bands with the values `Orange, Grey, Blue, Green, Blue and Brown`, you would translate them the following way:
+For example, if given a set of resistance bands with the values `Orange, Grey, Blue, Green, Blue and Brown` you would translate them the following way:
 |Orange|Grey|Blue|Green|Blue|Brown|=|
-|------|----|----|-----|----|----|--|
-|  3   | 8  | 6  |x100k|+/-0.25|100ppm/K|38600000 Ohms +/-0.25 100ppm/K|
+|------|----|----|-----|----|-----|-|
+|3     |8   |6   |x100k|+/-0.25|100ppm/K|38600000 Ohms +/-0.25 100ppm/K|
 
 
-ResistCalc-CLI will calculate a resistance if only one or two bands are given, but such a resistor is  not considered practical or may not found "on the shelf" for purchase.
+ResistCalc-CLI will calculate a resistance if only one or two bands are given, but such a resistor is not considered practical or may not be found "on the shelf" for purchase.
 
-As a bonus for this project ResistCalc-CLI can also translate from a resistance value to a list of color band values.  This feature is less practical since it assumes a five band resistor for all cases with the exception of a 0 ohm resistor, which is a [thing](https://en.wikipedia.org/wiki/Zero-ohm_link) believe it or not.  In reality, a resistance value could have more than one set of color bands to represent that value but was outside the scope of this project (for now).
+As a bonus for this project, ResistCalc-CLI can also translate from a resistance value to color band values.  This feature is less practical since it assumes a five band resistor for all cases with the exception of a 0 ohm resistor, which is a [thing](https://en.wikipedia.org/wiki/Zero-ohm_link) believe it or not.  In reality a resistance value could have more than one set of color bands to represent that value but was outside the scope of this project (for now).
 
 ## How to install...
+ResistCalc-CLI will run on both Windows and Unix/Linux systems. Start by downloading the zip file from the distributions directory [here](https://github.com/baphil8649/ResistCalc-CLI/tree/master/build/distributions) to any folder and unzip the files.  Once unziped, navigate down to the `\ResistCalc-CLI\bin` directory.  From here you can execute ResistCalc-CLI from either Windows PowerShell
+
+or terminal emulator in Unix and Linux
+
+> If running from a Unix or Linux shell only (with no GUI) you will need to clone the repository locally using Git. Git can be installed using your distribution's repository of choice (apt, yum, pacman, etc)
+
+## Usage...
+#### SYNOPSIS
+    ResistCalc-CLI [OPTION] VALUE(s)...
+#### OPTIONS
+`--debug`	Displays debug information while executing a given command.
+`--help`	Outputs a detailed usage message and exits. Overrides all other options listed.
+`-c,  --color-bands`	Translate resistance from color bands. Allows up to six bands in a comma delimited list.  Overrides translating color codes from resistance (`-r`) if both commands given.
+`-r,  --resistance-value`	Translate color band codes from resistance in ohms.  As a disclaimer, this assumes a five band resistor with a default tolerance of +/-1% (BROWN) and may not be a pratical for real-world application.  A sixth band can be applied by defining a temp. coefficient value (`-tc`).
+#### EXAMPLES
+
+## Credit where credit is due...
