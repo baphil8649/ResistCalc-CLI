@@ -28,10 +28,10 @@ For example, if given a set of resistance bands with the values `Orange, Grey, B
 
 ResistCalc-CLI will calculate a resistance if only one or two bands are given, but such a resistor is not considered practical or may not be found "on the shelf" for purchase.
 
-As a bonus for this project, ResistCalc-CLI can also translate a resistance value to color band values.  This feature is less practical since it assumes a five band resistor for all cases with the exception of a 0 ohm resistor (which is a [thing](https://en.wikipedia.org/wiki/Zero-ohm_link) believe it or not).  In reality, a resistance value could have more than one set of color bands to represent that value but was outside the scope of this project (for now).
+As a bonus for this project, ResistCalc-CLI can also translate a resistance value to color bands.  This feature is less practical since it assumes a five band resistor for all cases with the exception of a 0 ohm resistor (which is a [thing](https://en.wikipedia.org/wiki/Zero-ohm_link) believe it or not).  In reality, a resistance value could have more than one set of color bands to represent that value but was outside the scope of this project (for now).
 
 ## How to install...
-ResistCalc-CLI will run on Windows, macOS and Linux operating systems as long as the Java Runtime Environment of at least 1.8 (or Java 8) is installed. Start by downloading the zip file from the distributions directory [here](https://github.com/baphil8649/ResistCalc-CLI/tree/master/build/distributions) to any folder and unzip the files.  Once unzipped, navigate down to the `\ResistCalc-CLI\bin` directory.  From here you can execute ResistCalc-CLI from either Windows PowerShell or terminal emulator in macOS and Linux.
+ResistCalc-CLI will run on Windows, macOS and Linux operating systems as long as the Java Runtime Environment of at least 1.8 (or Java 8) is installed. Start by downloading the zip file from the distributions directory [here](https://github.com/baphil8649/ResistCalc-CLI/tree/master/build/distributions) to any folder and unzip the files.  Once unzipped, navigate down to the `\ResistCalc-CLI\bin` directory from Windows PowerShell or terminal emulator in macOS and Linux.  From here you can execute ResistCalc-CLI executable batch file (.bat) or shell script (no file extension).
 
 ![enter image description here](https://github.com/baphil8649/ResistCalc-CLI/blob/master/images/bash-example.png)
 
